@@ -1,0 +1,28 @@
+<div id="calendar">
+    <h2>{{ currentMonthName }} {{ currentYear }}</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Sun</th>
+          <th>Mon</th>
+          <th>Tue</th>
+          <th>Wed</th>
+          <th>Thu</th>
+          <th>Fri</th>
+          <th>Sat</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let week of calendar; let i=index">
+          <ng-container *ngFor="let day of week; let j=index">
+            <td>{{ day }}</td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <button class="btn" (click)="prevMonth()">&#10094; Prev</button>
+      <button class="btn" (click)="nextMonth()">Next &#10095;</button>
+    </div>
+  </div>
+  
