@@ -1,0 +1,321 @@
+{
+  "organization": {
+    "name": "ProjectManning Organization",
+    "version": "1.0.0",
+    "lastUpdated": "2024-01-01"
+  },
+  "managers": [
+    {
+      "id": "mgr-001",
+      "name": "Manager 1",
+      "role": "Team Manager",
+      "teams": ["team-001", "team-002", "team-003"],
+      "description": "Leads multiple teams"
+    }
+  ],
+  "teams": [
+    {
+      "id": "team-001",
+      "name": "Team 1",
+      "managerId": "mgr-001",
+      "developers": ["dev-001", "dev-002"],
+      "sharedResources": ["dev-003"],
+      "description": "Primary development team"
+    },
+    {
+      "id": "team-002", 
+      "name": "Team 2",
+      "managerId": "mgr-001",
+      "developers": ["dev-004", "dev-005"],
+      "sharedResources": [],
+      "description": "Secondary development team"
+    },
+    {
+      "id": "team-003",
+      "name": "Team 3", 
+      "managerId": "mgr-001",
+      "developers": ["dev-006"],
+      "sharedResources": ["dev-003"],
+      "description": "Specialized team"
+    }
+  ],
+  "developers": [
+    {
+      "id": "dev-001",
+      "name": "Developer 1",
+      "teamId": "team-001",
+      "isSharedResource": false,
+      "techSkills": {
+        "Java": 7,
+        "Angular": 8,
+        "Data": 6,
+        "CICD": 7
+      },
+      "appSkills": {
+        "App 1": 8,
+        "App 2": 7,
+        "App 3": 9
+      },
+      "availability": {
+        "status": "active",
+        "vacationDays": [
+          {
+            "type": "range",
+            "startDate": "2024-07-15",
+            "endDate": "2024-07-22",
+            "description": "Summer vacation"
+          },
+          {
+            "type": "single",
+            "date": "2024-12-25",
+            "description": "Christmas Day"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dev-002",
+      "name": "Developer 2", 
+      "teamId": "team-001",
+      "isSharedResource": false,
+      "techSkills": {
+        "Java": 8,
+        "Angular": 6,
+        "Data": 9,
+        "CICD": 5
+      },
+      "appSkills": {
+        "App 1": 6,
+        "App 2": 8,
+        "App 3": 7
+      },
+      "availability": {
+        "status": "active",
+        "vacationDays": [
+          {
+            "type": "range",
+            "startDate": "2024-08-10",
+            "endDate": "2024-08-17",
+            "description": "Family vacation"
+          },
+          {
+            "type": "single",
+            "date": "2024-11-28",
+            "description": "Thanksgiving"
+          },
+          {
+            "type": "single",
+            "date": "2024-12-31",
+            "description": "New Year's Eve"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dev-003",
+      "name": "Developer 3",
+      "teamId": null,
+      "isSharedResource": true,
+      "assignedTeams": ["team-001", "team-003"],
+      "techSkills": {
+        "Java": 9,
+        "Angular": 7,
+        "Data": 8,
+        "CICD": 9
+      },
+      "appSkills": {
+        "App 1": 9,
+        "App 2": 8,
+        "App 3": 8
+      },
+      "availability": {
+        "status": "active",
+        "vacationDays": [
+          {
+            "type": "range",
+            "startDate": "2024-06-20",
+            "endDate": "2024-06-27",
+            "description": "Conference attendance"
+          },
+          {
+            "type": "range",
+            "startDate": "2024-09-15",
+            "endDate": "2024-09-22",
+            "description": "Personal time off"
+          },
+          {
+            "type": "single",
+            "date": "2024-12-24",
+            "description": "Christmas Eve"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dev-004",
+      "name": "Developer 4",
+      "teamId": "team-002",
+      "isSharedResource": false,
+      "techSkills": {
+        "Java": 6,
+        "Angular": 9,
+        "Data": 5,
+        "CICD": 6
+      },
+      "appSkills": {
+        "App 1": 7,
+        "App 2": 9,
+        "App 3": 6
+      },
+      "availability": {
+        "status": "active",
+        "vacationDays": [
+          {
+            "type": "range",
+            "startDate": "2024-05-20",
+            "endDate": "2024-05-25",
+            "description": "Spring break"
+          },
+          {
+            "type": "single",
+            "date": "2024-07-04",
+            "description": "Independence Day"
+          },
+          {
+            "type": "single",
+            "date": "2024-12-26",
+            "description": "Boxing Day"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dev-005",
+      "name": "Developer 5",
+      "teamId": "team-002", 
+      "isSharedResource": false,
+      "techSkills": {
+        "Java": 7,
+        "Angular": 7,
+        "Data": 7,
+        "CICD": 8
+      },
+      "appSkills": {
+        "App 1": 8,
+        "App 2": 7,
+        "App 3": 8
+      },
+      "availability": {
+        "status": "active",
+        "vacationDays": [
+          {
+            "type": "range",
+            "startDate": "2024-04-15",
+            "endDate": "2024-04-20",
+            "description": "Easter break"
+          },
+          {
+            "type": "single",
+            "date": "2024-09-02",
+            "description": "Labor Day"
+          },
+          {
+            "type": "range",
+            "startDate": "2024-12-20",
+            "endDate": "2024-12-27",
+            "description": "Holiday season"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dev-006",
+      "name": "Developer 6",
+      "teamId": "team-003",
+      "isSharedResource": false,
+      "techSkills": {
+        "Java": 8,
+        "Angular": 6,
+        "Data": 9,
+        "CICD": 7
+      },
+      "appSkills": {
+        "App 1": 7,
+        "App 2": 8,
+        "App 3": 9
+      },
+      "availability": {
+        "status": "active",
+        "vacationDays": [
+          {
+            "type": "range",
+            "startDate": "2024-03-15",
+            "endDate": "2024-03-22",
+            "description": "Spring vacation"
+          },
+          {
+            "type": "single",
+            "date": "2024-05-27",
+            "description": "Memorial Day"
+          },
+          {
+            "type": "single",
+            "date": "2024-10-14",
+            "description": "Columbus Day"
+          }
+        ]
+      }
+    }
+  ],
+  "skillDefinitions": {
+    "techSkills": {
+      "Java": {
+        "description": "Java programming language",
+        "scale": "0-10",
+        "category": "Programming Language"
+      },
+      "Angular": {
+        "description": "Angular framework",
+        "scale": "0-10", 
+        "category": "Frontend Framework"
+      },
+      "Data": {
+        "description": "Data analysis and management",
+        "scale": "0-10",
+        "category": "Data Management"
+      },
+      "CICD": {
+        "description": "Continuous Integration/Continuous Deployment",
+        "scale": "0-10",
+        "category": "DevOps"
+      }
+    },
+    "appSkills": {
+      "App 1": {
+        "description": "Application 1 specific knowledge",
+        "scale": "0-10",
+        "category": "Application Specific"
+      },
+      "App 2": {
+        "description": "Application 2 specific knowledge", 
+        "scale": "0-10",
+        "category": "Application Specific"
+      },
+      "App 3": {
+        "description": "Application 3 specific knowledge",
+        "scale": "0-10",
+        "category": "Application Specific"
+      }
+    }
+  },
+  "metadata": {
+    "skillScales": {
+      "techSkillsScale": "0-10",
+      "appSkillsScale": "0-10"
+    },
+    "defaultTechSkillRating": 7,
+    "defaultAppSkillRating": 8,
+    "sharedResourceIndicator": "isSharedResource",
+    "vacationTracking": true
+  }
+}
