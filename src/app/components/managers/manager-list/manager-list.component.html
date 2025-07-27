@@ -1,0 +1,76 @@
+<div class="manager-list-container">
+  <div class="page-header">
+    <h1>Managers</h1>
+    <button class="btn-primary" (click)="addManager()">
+      <span>+</span> Add Manager
+    </button>
+  </div>
+
+  <div class="content-area">
+    <div class="loading-spinner" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading managers...</p>
+    </div>
+
+    <div class="managers-table" *ngIf="!loading">
+      <div class="table-header">
+        <div class="header-cell">Name</div>
+        <div class="header-cell">Role</div>
+        <div class="header-cell">Teams</div>
+        <div class="header-cell">Description</div>
+        <div class="header-cell">Actions</div>
+      </div>
+
+      <div class="table-body">
+        <div class="table-row" *ngFor="let manager of managers">
+          <div class="table-cell">
+            <div class="manager-info">
+              <div class="manager-avatar">👥</div>
+              <div class="manager-details">
+                <h3>{{ manager.name }}</h3>
+                <span class="manager-id">ID: {{ manager.id }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="table-cell">
+            <span class="role-badge">{{ manager.role }}</span>
+          </div>
+          
+          <div class="table-cell">
+            <div class="teams-info">
+              <span class="teams-count">{{ getTeamsForManager(manager.id).length }} teams</span>
+              <div class="teams-list">
+                {{ getTeamNames(manager.teams) }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="table-cell">
+            <p class="description">{{ manager.description }}</p>
+          </div>
+          
+          <div class="table-cell">
+            <div class="action-buttons">
+              <button class="btn-edit" (click)="editManager(manager.id)">
+                ✏️ Edit
+              </button>
+              <button class="btn-delete" (click)="deleteManager(manager.id)">
+                🗑️ Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="managers.length === 0">
+        <div class="empty-icon">👥</div>
+        <h3>No Managers Found</h3>
+        <p>Get started by adding your first manager to the organization.</p>
+        <button class="btn-primary" (click)="addManager()">
+          Add First Manager
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

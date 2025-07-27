@@ -1,4 +1,19 @@
-<div class="container">
-  <h1>Welcome to {{ title }}</h1>
-  <p>Your team management application is ready for development!</p>
+<div class="app-container">
+  <nav class="navbar">
+    <div class="nav-brand">
+      <h1>ProjectManning</h1>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</a>
+      <a routerLink="/managers" routerLinkActive="active">Managers</a>
+      <a routerLink="/teams" routerLinkActive="active">Teams</a>
+      <a routerLink="/developers" routerLinkActive="active">Developers</a>
+      <a routerLink="/skills" routerLinkActive="active">Skills</a>
+      <a routerLink="/vacations" routerLinkActive="active">Vacations</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
 </div>
