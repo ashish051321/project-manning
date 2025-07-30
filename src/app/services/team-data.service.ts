@@ -197,7 +197,12 @@ export class TeamDataService {
   }
 
   getDeveloperById(id: string): Developer | undefined {
-    return this.getDevelopers().find(developer => developer.id === id);
+    const developers = this.getDevelopers();
+    console.log('Looking for developer with ID:', id);
+    console.log('Available developers:', developers);
+    const developer = developers.find(developer => developer.id === id);
+    console.log('Found developer:', developer);
+    return developer;
   }
 
   // Get related data

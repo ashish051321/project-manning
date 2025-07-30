@@ -1,1 +1,296 @@
-<p>developer-form works!</p>
+<div class="developer-form-container">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Edit Developer' : 'Add New Developer' }}</h1>
+    <button class="btn-secondary" (click)="onCancel()">
+      ← Back to Developers
+    </button>
+  </div>
+
+  <div class="content-area">
+    <div class="loading-spinner" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading developer data...</p>
+    </div>
+
+    <form [formGroup]="developerForm" (ngSubmit)="onSubmit()" *ngIf="!loading && developerForm" class="developer-form">
+      <div class="form-section">
+        <h2>Basic Information</h2>
+        
+        <div class="form-group">
+          <label for="name">Developer Name *</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            placeholder="Enter developer name"
+            [class.invalid]="isFieldInvalid('name')"
+          >
+          <div class="error-message" *ngIf="isFieldInvalid('name')">
+            {{ getFieldError('name') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="developerType">Developer Type</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input 
+                type="radio" 
+                formControlName="isSharedResource" 
+                [value]="false"
+                (change)="onDeveloperTypeChange()"
+              >
+              <span class="radio-label">Primary Team Member</span>
+            </label>
+            <label class="radio-option">
+              <input 
+                type="radio" 
+                formControlName="isSharedResource" 
+                [value]="true"
+                (change)="onDeveloperTypeChange()"
+              >
+              <span class="radio-label">Shared Resource</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" formGroupName="availability">
+          <label for="status">Availability Status</label>
+          <select id="status" formControlName="status">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Team Assignment</h2>
+        
+        <div class="team-assignment-section">
+          <div class="assignment-overview">
+            <div class="overview-card">
+              <div class="overview-icon">🏢</div>
+              <div class="overview-content">
+                <h3>{{ getSelectedTeams().length }}</h3>
+                <p>Assigned Teams</p>
+              </div>
+            </div>
+            
+            <div class="overview-card">
+              <div class="overview-icon">📋</div>
+              <div class="overview-content">
+                <h3>{{ getAvailableTeams().length }}</h3>
+                <p>Available Teams</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="team-selection">
+            <div class="available-teams">
+              <h3>Available Teams</h3>
+              <p class="section-description">Teams that can be assigned to this developer</p>
+              
+              <div class="team-list">
+                <div 
+                  *ngFor="let team of getAvailableTeams()" 
+                  class="team-item available"
+                  (click)="addTeam(team.id)"
+                >
+                  <div class="team-avatar">🏢</div>
+                  <div class="team-info">
+                    <span class="team-name">{{ team.name }}</span>
+                    <span class="team-description">{{ team.description }}</span>
+                  </div>
+                  <button type="button" class="btn-add">+ Assign</button>
+                </div>
+                <div class="no-teams" *ngIf="getAvailableTeams().length === 0">
+                  No available teams to assign
+                </div>
+              </div>
+            </div>
+
+            <div class="selected-teams">
+              <h3>Assigned Teams</h3>
+              <p class="section-description">Teams currently assigned to this developer</p>
+              
+              <div class="team-list">
+                <div 
+                  *ngFor="let team of getSelectedTeams()" 
+                  class="team-item selected"
+                >
+                  <div class="team-avatar">🏢</div>
+                  <div class="team-info">
+                    <span class="team-name">{{ team.name }}</span>
+                    <span class="team-description">{{ team.description }}</span>
+                  </div>
+                  <button 
+                    type="button" 
+                    class="btn-remove"
+                    (click)="removeTeam(team.id)"
+                  >
+                    × Remove
+                  </button>
+                </div>
+                <div class="no-teams" *ngIf="getSelectedTeams().length === 0">
+                  No teams assigned yet
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Skills & Expertise</h2>
+        
+        <div class="skills-section">
+          <div class="skills-overview">
+            <div class="overview-card">
+              <div class="overview-icon">💻</div>
+              <div class="overview-content">
+                <h3>{{ getSkillCount() }}</h3>
+                <p>Tech Skills</p>
+              </div>
+            </div>
+            
+            <div class="overview-card">
+              <div class="overview-icon">📱</div>
+              <div class="overview-content">
+                <h3>{{ getAppCount() }}</h3>
+                <p>App Skills</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="skills-grid">
+            <div class="tech-skills">
+              <h3>Technical Skills</h3>
+              <p class="section-description">Rate skills from 0-10 (0 = no experience, 10 = expert)</p>
+              
+              <div class="skills-list" formGroupName="techSkills">
+                <div class="skill-item" *ngFor="let skill of techSkillDefinitions">
+                  <label [for]="'tech-' + skill">{{ skill }}</label>
+                  <input 
+                    type="number" 
+                    [id]="'tech-' + skill"
+                    [formControlName]="skill"
+                    min="0" 
+                    max="10"
+                    class="skill-rating"
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="app-skills">
+              <h3>Application Skills</h3>
+              <p class="section-description">Rate application knowledge from 0-10</p>
+              
+              <div class="skills-list" formGroupName="appSkills">
+                <div class="skill-item" *ngFor="let app of appSkillDefinitions">
+                  <label [for]="'app-' + app">{{ app }}</label>
+                  <input 
+                    type="number" 
+                    [id]="'app-' + app"
+                    [formControlName]="app"
+                    min="0" 
+                    max="10"
+                    class="skill-rating"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Vacation & Availability</h2>
+        
+        <div class="vacation-section">
+          <div class="vacation-overview">
+            <div class="overview-card">
+              <div class="overview-icon">🏖️</div>
+              <div class="overview-content">
+                <h3>{{ getVacationCount() }}</h3>
+                <p>Total Days</p>
+                <small>{{ getVacationEntriesCount() }} entries</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="vacation-management">
+            <div class="vacation-header">
+              <h3>Vacation Days</h3>
+              <button type="button" class="btn-add-vacation" (click)="addVacationDay()">
+                + Add Vacation Day
+              </button>
+            </div>
+
+            <div class="vacation-list" formGroupName="availability">
+              <div formArrayName="vacationDays">
+                <div class="vacation-item" *ngFor="let vacation of vacationDaysArray.controls; let i = index" [formGroupName]="i">
+                  <div class="vacation-header">
+                    <h4>Vacation Day {{ i + 1 }}</h4>
+                    <button type="button" class="btn-remove-vacation" (click)="removeVacationDay(i)">
+                      × Remove
+                    </button>
+                  </div>
+                  
+                  <div class="vacation-form">
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label>Type</label>
+                        <select formControlName="type">
+                          <option value="single">Single Day</option>
+                          <option value="range">Date Range</option>
+                        </select>
+                      </div>
+                      
+                      <div class="form-group" *ngIf="vacation.get('type')?.value === 'single'">
+                        <label>Date</label>
+                        <input type="date" formControlName="date">
+                      </div>
+                      
+                      <div class="form-group" *ngIf="vacation.get('type')?.value === 'range'">
+                        <label>Start Date</label>
+                        <input type="date" formControlName="startDate">
+                      </div>
+                      
+                      <div class="form-group" *ngIf="vacation.get('type')?.value === 'range'">
+                        <label>End Date</label>
+                        <input type="date" formControlName="endDate">
+                      </div>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label>Description</label>
+                      <input 
+                        type="text" 
+                        formControlName="description" 
+                        placeholder="Reason for vacation"
+                      >
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="no-vacations" *ngIf="vacationDaysArray.length === 0">
+                  No vacation days added yet
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">
+          Cancel
+        </button>
+        <button type="submit" class="btn-submit" [disabled]="developerForm.invalid">
+          {{ isEditMode ? 'Update Developer' : 'Create Developer' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

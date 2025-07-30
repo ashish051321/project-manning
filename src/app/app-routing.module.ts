@@ -9,6 +9,7 @@ import { DeveloperListComponent } from './components/developers/developer-list/d
 import { DeveloperFormComponent } from './components/developers/developer-form/developer-form.component';
 import { SkillManagementComponent } from './components/skills/skill-management/skill-management.component';
 import { VacationCalendarComponent } from './components/vacations/vacation-calendar/vacation-calendar.component';
+import { SupportAvailabilityComponent } from './components/support-availability/support-availability.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -23,7 +24,8 @@ const routes: Routes = [
   { path: 'developers/add', component: DeveloperFormComponent },
   { path: 'developers/edit/:id', component: DeveloperFormComponent },
   { path: 'skills', component: SkillManagementComponent },
-  { path: 'vacations', component: VacationCalendarComponent }
+  { path: 'vacations', component: VacationCalendarComponent },
+  { path: 'support-availability', component: SupportAvailabilityComponent }
 ];
 
 @NgModule({

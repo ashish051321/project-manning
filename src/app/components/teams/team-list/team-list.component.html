@@ -1,1 +1,128 @@
-<p>team-list works!</p>
+<div class="team-list-container">
+  <div class="page-header">
+    <h1>Teams</h1>
+    <button class="btn-primary" (click)="addTeam()">
+      <span>+</span> Add Team
+    </button>
+  </div>
+
+  <div class="content-area">
+    <div class="loading-spinner" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading teams...</p>
+    </div>
+
+    <div class="teams-table" *ngIf="!loading">
+      <div class="table-header">
+        <div class="header-cell">Team</div>
+        <div class="header-cell">Manager</div>
+        <div class="header-cell">Members</div>
+        <div class="header-cell">Shared Resources</div>
+        <div class="header-cell">Description</div>
+        <div class="header-cell">Actions</div>
+      </div>
+
+      <div class="table-body">
+        <div class="table-row" *ngFor="let team of teams">
+          <div class="table-cell">
+            <div class="team-info">
+              <div class="team-avatar">🏢</div>
+              <div class="team-details">
+                <h3>{{ team.name }}</h3>
+                <span class="team-id">ID: {{ team.id }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="table-cell">
+            <div class="manager-info">
+              <span class="manager-name">{{ getManagerName(team.managerId) }}</span>
+              <span class="manager-status" [class.assigned]="team.managerId && team.managerId !== ''">
+                {{ team.managerId && team.managerId !== '' ? 'Assigned' : 'Unassigned' }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="table-cell">
+            <div class="members-info">
+              <div class="member-count">
+                <span class="count-badge">{{ getTeamMemberCount(team.id) }}</span>
+                <span class="count-label">Total Members</span>
+              </div>
+              <div class="member-breakdown">
+                <span class="primary-count">{{ getPrimaryDevelopers(team.id).length }} Primary</span>
+                <span class="shared-count" *ngIf="getSharedResourceCount(team.id) > 0">
+                  {{ getSharedResourceCount(team.id) }} Shared
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="table-cell">
+            <div class="shared-resources">
+              <div class="shared-count" *ngIf="getSharedResourceCount(team.id) > 0">
+                <span class="shared-badge">{{ getSharedResourceCount(team.id) }}</span>
+                <span class="shared-label">Shared Resources</span>
+              </div>
+              <div class="shared-list" *ngIf="getSharedResources(team.id).length > 0">
+                {{ getDeveloperNames(getSharedResourceIds(team.id)) }}
+              </div>
+              <span class="no-shared" *ngIf="getSharedResourceCount(team.id) === 0">None</span>
+            </div>
+          </div>
+          
+          <div class="table-cell">
+            <p class="description">{{ team.description }}</p>
+          </div>
+          
+          <div class="table-cell">
+            <div class="action-buttons">
+              <button class="btn-edit" (click)="editTeam(team.id)">
+                ✏️ Edit
+              </button>
+              <button class="btn-delete" (click)="deleteTeam(team.id)">
+                🗑️ Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="teams.length === 0">
+        <div class="empty-icon">🏢</div>
+        <h3>No Teams Found</h3>
+        <p>Get started by creating your first team to organize your developers.</p>
+        <button class="btn-primary" (click)="addTeam()">
+          Create First Team
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Team Statistics -->
+  <div class="team-stats" *ngIf="!loading && teams.length > 0">
+    <div class="stats-card">
+      <div class="stat-icon">🏢</div>
+      <div class="stat-content">
+        <h3>{{ getTeamCount() }}</h3>
+        <p>Total Teams</p>
+      </div>
+    </div>
+    
+    <div class="stats-card">
+      <div class="stat-icon">👥</div>
+      <div class="stat-content">
+        <h3>{{ getTeamsWithManagers() }}</h3>
+        <p>Teams with Managers</p>
+      </div>
+    </div>
+    
+    <div class="stats-card">
+      <div class="stat-icon">👨‍💻</div>
+      <div class="stat-content">
+        <h3>{{ getTotalDevelopers() }}</h3>
+        <p>Total Developers</p>
+      </div>
+    </div>
+  </div>
+</div>

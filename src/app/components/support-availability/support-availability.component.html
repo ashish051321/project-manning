@@ -1,0 +1,111 @@
+<div class="support-availability-container">
+  <div class="header">
+    <h1>Support Availability Calendar</h1>
+    <p>Monitor application support risks based on developer vacations</p>
+  </div>
+
+  <!-- Selection Controls -->
+  <div class="selection-controls">
+    <div class="control-group">
+      <label for="teamSelect">Team</label>
+      <select 
+        id="teamSelect" 
+        [(ngModel)]="selectedTeamId" 
+        (change)="onTeamChange()"
+        class="form-select">
+        <option value="">Select Team</option>
+        <option *ngFor="let team of teams" [value]="team.id">
+          {{ team.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="appSelect">Application</label>
+      <select 
+        id="appSelect" 
+        [(ngModel)]="selectedApplication" 
+        (change)="onApplicationChange()"
+        class="form-select">
+        <option value="">Select Application</option>
+        <option *ngFor="let app of applications" [value]="app">
+          {{ app }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Calendar Navigation -->
+  <div class="calendar-header" *ngIf="selectedTeamId && selectedApplication">
+    <div class="calendar-nav">
+      <button class="nav-btn" (click)="previousMonth()">
+        <span class="nav-icon">‹</span>
+      </button>
+      <h2 class="month-title">{{ getMonthName() }}</h2>
+      <button class="nav-btn" (click)="nextMonth()">
+        <span class="nav-icon">›</span>
+      </button>
+    </div>
+    <button class="today-btn" (click)="goToToday()">Today</button>
+  </div>
+
+  <!-- Risk Legend -->
+  <div class="risk-legend" *ngIf="selectedTeamId && selectedApplication">
+    <div class="legend-item">
+      <div class="legend-color risk"></div>
+      <span>No Support Available - All developers with this application skill are on vacation</span>
+    </div>
+  </div>
+
+  <!-- Calendar -->
+  <div class="calendar-container" *ngIf="selectedTeamId && selectedApplication && !loading">
+    <!-- Day Headers -->
+    <div class="calendar-grid">
+      <div class="day-header" *ngFor="let dayName of [0,1,2,3,4,5,6]">
+        {{ getDayName(dayName) }}
+      </div>
+
+      <!-- Calendar Days -->
+      <div 
+        class="calendar-day" 
+        *ngFor="let day of calendarDays; let i = index"
+        [class.other-month]="!day.isCurrentMonth"
+        [class.today]="day.isToday"
+        [class.at-risk]="day.isAtRisk"
+        [class.clickable]="day.isAtRisk && day.unavailableDevelopers.length > 0"
+        (click)="onDateClick(day)"
+        [title]="day.isAtRisk ? getUnavailableDevelopersText(day.unavailableDevelopers) : ''">
+        
+        <div class="day-number">{{ day.date.getDate() }}</div>
+        
+        <!-- Risk Indicator -->
+        <div class="risk-indicator" *ngIf="day.isAtRisk">
+          <span class="risk-icon">⚠️</span>
+          <div class="developer-count" *ngIf="day.unavailableDevelopers.length > 1">
+            {{ day.unavailableDevelopers.length }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="loading">
+    <div class="loading-spinner"></div>
+    <p>Loading support availability data...</p>
+  </div>
+
+  <!-- No Selection State -->
+  <div class="no-selection-state" *ngIf="!loading && (!selectedTeamId || !selectedApplication)">
+    <div class="no-selection-icon">📅</div>
+    <h3>Select Team and Application</h3>
+    <p>Choose a team and application to view support availability calendar</p>
+  </div>
+
+  <!-- No Risk State -->
+  <div class="no-risk-state" *ngIf="!loading && selectedTeamId && selectedApplication && calendarDays.length > 0 && !hasAnyRiskDays()">
+    <div class="no-risk-icon">✅</div>
+    <h3>No Support Risks Detected</h3>
+    <p>All developers with {{ selectedApplication }} skills are available for the selected period</p>
+  </div>
+</div> 

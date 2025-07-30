@@ -14,6 +14,7 @@ import { DeveloperListComponent } from './components/developers/developer-list/d
 import { DeveloperFormComponent } from './components/developers/developer-form/developer-form.component';
 import { SkillManagementComponent } from './components/skills/skill-management/skill-management.component';
 import { VacationCalendarComponent } from './components/vacations/vacation-calendar/vacation-calendar.component';
+import { SupportAvailabilityComponent } from './components/support-availability/support-availability.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { VacationCalendarComponent } from './components/vacations/vacation-calen
     DeveloperListComponent,
     DeveloperFormComponent,
     SkillManagementComponent,
-    VacationCalendarComponent
+    VacationCalendarComponent,
+    SupportAvailabilityComponent
   ],
   imports: [
     BrowserModule,

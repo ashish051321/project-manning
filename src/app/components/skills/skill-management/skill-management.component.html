@@ -1,1 +1,198 @@
-<p>skill-management works!</p>
+<div class="skills-management-container">
+  <div class="header">
+    <h1>Skills Management</h1>
+    <p>Manage technical skills and application skills that can be assigned to developers</p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-icon">🔧</div>
+      <div class="stat-content">
+        <h3>{{ getSkillCount('tech') }}</h3>
+        <p>Technical Skills</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📱</div>
+      <div class="stat-content">
+        <h3>{{ getSkillCount('app') }}</h3>
+        <p>Application Skills</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-content">
+        <h3>{{ getTotalSkillCount() }}</h3>
+        <p>Total Skills</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-container">
+    <div class="tab-buttons">
+      <button 
+        class="tab-button" 
+        [class.active]="activeTab === 'tech'"
+        (click)="setActiveTab('tech')">
+        🔧 Technical Skills
+      </button>
+      <button 
+        class="tab-button" 
+        [class.active]="activeTab === 'app'"
+        (click)="setActiveTab('app')">
+        📱 Application Skills
+      </button>
+    </div>
+
+    <!-- Add Skill Button -->
+    <button class="add-button" (click)="showAddSkillForm()">
+      <span class="add-icon">+</span>
+      Add {{ activeTab === 'tech' ? 'Technical' : 'Application' }} Skill
+    </button>
+  </div>
+
+  <!-- Skills List -->
+  <div class="skills-list" *ngIf="!loading">
+    <div class="skills-grid" *ngIf="activeTab === 'tech'">
+      <div class="skill-card" *ngFor="let skillItem of getTechSkills()">
+        <div class="skill-header">
+          <h3>{{ skillItem.name }}</h3>
+          <div class="skill-actions">
+            <button class="edit-btn" (click)="editSkill(skillItem.name, 'tech')">
+              ✏️ Edit
+            </button>
+            <button class="delete-btn" (click)="deleteSkill(skillItem.name, 'tech')">
+              🗑️ Delete
+            </button>
+          </div>
+        </div>
+        <div class="skill-content">
+          <p class="skill-description">{{ skillItem.skill.description }}</p>
+          <div class="skill-details">
+            <span class="skill-category">Category: {{ skillItem.skill.category }}</span>
+            <span class="skill-scale">Scale: {{ skillItem.skill.scale }}</span>
+            <span class="skill-usage">Used by {{ getSkillUsageCount(skillItem.name, 'tech') }} developers</span>
+          </div>
+        </div>
+      </div>
+      <div class="empty-state" *ngIf="getTechSkills().length === 0">
+        <div class="empty-icon">🔧</div>
+        <h3>No Technical Skills</h3>
+        <p>Add your first technical skill to get started</p>
+        <button class="add-button" (click)="showAddSkillForm()">Add Technical Skill</button>
+      </div>
+    </div>
+
+    <div class="skills-grid" *ngIf="activeTab === 'app'">
+      <div class="skill-card" *ngFor="let skillItem of getAppSkills()">
+        <div class="skill-header">
+          <h3>{{ skillItem.name }}</h3>
+          <div class="skill-actions">
+            <button class="edit-btn" (click)="editSkill(skillItem.name, 'app')">
+              ✏️ Edit
+            </button>
+            <button class="delete-btn" (click)="deleteSkill(skillItem.name, 'app')">
+              🗑️ Delete
+            </button>
+          </div>
+        </div>
+        <div class="skill-content">
+          <p class="skill-description">{{ skillItem.skill.description }}</p>
+          <div class="skill-details">
+            <span class="skill-category">Category: {{ skillItem.skill.category }}</span>
+            <span class="skill-scale">Scale: {{ skillItem.skill.scale }}</span>
+            <span class="skill-usage">Used by {{ getSkillUsageCount(skillItem.name, 'app') }} developers</span>
+          </div>
+        </div>
+      </div>
+      <div class="empty-state" *ngIf="getAppSkills().length === 0">
+        <div class="empty-icon">📱</div>
+        <h3>No Application Skills</h3>
+        <p>Add your first application skill to get started</p>
+        <button class="add-button" (click)="showAddSkillForm()">Add Application Skill</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="loading">
+    <div class="loading-spinner"></div>
+    <p>Loading skills...</p>
+  </div>
+
+  <!-- Add/Edit Skill Form Modal -->
+  <div class="modal-overlay" *ngIf="showAddForm" (click)="cancelForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ isEditMode ? 'Edit' : 'Add' }} {{ activeTab === 'tech' ? 'Technical' : 'Application' }} Skill</h2>
+        <button class="close-button" (click)="cancelForm()">×</button>
+      </div>
+
+      <form [formGroup]="skillForm" (ngSubmit)="onSubmit()" class="skill-form">
+        <div class="form-group">
+          <label for="name">Skill Name *</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            placeholder="Enter skill name"
+            [class.invalid]="isFieldInvalid('name')">
+          <div class="error-message" *ngIf="isFieldInvalid('name')">
+            {{ getFieldError('name') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description *</label>
+          <textarea 
+            id="description" 
+            formControlName="description" 
+            placeholder="Enter skill description"
+            rows="3"
+            [class.invalid]="isFieldInvalid('description')"></textarea>
+          <div class="error-message" *ngIf="isFieldInvalid('description')">
+            {{ getFieldError('description') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category *</label>
+          <input 
+            type="text" 
+            id="category" 
+            formControlName="category" 
+            placeholder="Enter skill category"
+            [class.invalid]="isFieldInvalid('category')">
+          <div class="error-message" *ngIf="isFieldInvalid('category')">
+            {{ getFieldError('category') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="scale">Rating Scale *</label>
+          <select 
+            id="scale" 
+            formControlName="scale"
+            [class.invalid]="isFieldInvalid('scale')">
+            <option value="1-5">1-5 (Basic)</option>
+            <option value="1-10">1-10 (Standard)</option>
+            <option value="Beginner-Expert">Beginner-Expert</option>
+            <option value="Low-High">Low-High</option>
+          </select>
+          <div class="error-message" *ngIf="isFieldInvalid('scale')">
+            {{ getFieldError('scale') }}
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="cancel-btn" (click)="cancelForm()">Cancel</button>
+          <button type="submit" class="submit-btn" [disabled]="skillForm.invalid">
+            {{ isEditMode ? 'Update' : 'Add' }} Skill
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

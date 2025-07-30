@@ -24,9 +24,19 @@ export class TeamManagementService {
       ...managerData
     };
 
+    // Update teams to assign them to the new manager
+    const assignedTeamIds = managerData.teams || [];
+    const updatedTeams = currentData.teams.map(team => {
+      if (assignedTeamIds.includes(team.id)) {
+        return { ...team, managerId: newManager.id };
+      }
+      return team;
+    });
+
     const updatedData: TeamData = {
       ...currentData,
-      managers: [...currentData.managers, newManager]
+      managers: [...currentData.managers, newManager],
+      teams: updatedTeams
     };
 
     this.teamDataService.updateTeamData(updatedData);
@@ -36,13 +46,36 @@ export class TeamManagementService {
     const currentData = this.teamDataService.getCurrentTeamData();
     if (!currentData) return;
 
+    // Get the current manager to compare team assignments
+    const currentManager = currentData.managers.find(manager => manager.id === id);
+    const currentAssignedTeams = currentManager ? currentManager.teams : [];
+    const newAssignedTeams = managerData.teams || [];
+
+    // Update managers
     const updatedManagers = currentData.managers.map(manager =>
       manager.id === id ? { ...manager, ...managerData } : manager
     );
 
+    // Update teams - remove managerId from teams that are no longer assigned
+    // and add managerId to newly assigned teams
+    const updatedTeams = currentData.teams.map(team => {
+      const wasAssigned = currentAssignedTeams.includes(team.id);
+      const isNowAssigned = newAssignedTeams.includes(team.id);
+      
+      if (wasAssigned && !isNowAssigned) {
+        // Team was unassigned from this manager
+        return { ...team, managerId: '' };
+      } else if (!wasAssigned && isNowAssigned) {
+        // Team was newly assigned to this manager
+        return { ...team, managerId: id };
+      }
+      return team;
+    });
+
     const updatedData: TeamData = {
       ...currentData,
-      managers: updatedManagers
+      managers: updatedManagers,
+      teams: updatedTeams
     };
 
     this.teamDataService.updateTeamData(updatedData);
@@ -146,8 +179,37 @@ export class TeamManagementService {
       }
     };
 
+    // Update teams to include the new developer
+    let updatedTeams = currentData.teams;
+    if (developerData.teamId) {
+      // Add developer to the assigned team
+      updatedTeams = currentData.teams.map(team => {
+        if (team.id === developerData.teamId) {
+          return {
+            ...team,
+            developers: [...team.developers, newDeveloper.id]
+          };
+        }
+        return team;
+      });
+    }
+
+    // Add developer to shared resources for assigned teams
+    if (developerData.isSharedResource && developerData.assignedTeams) {
+      updatedTeams = updatedTeams.map(team => {
+        if (developerData.assignedTeams!.includes(team.id)) {
+          return {
+            ...team,
+            sharedResources: [...team.sharedResources, newDeveloper.id]
+          };
+        }
+        return team;
+      });
+    }
+
     const updatedData: TeamData = {
       ...currentData,
+      teams: updatedTeams,
       developers: [...currentData.developers, newDeveloper]
     };
 
@@ -158,12 +220,82 @@ export class TeamManagementService {
     const currentData = this.teamDataService.getCurrentTeamData();
     if (!currentData) return;
 
+    // Get the current developer to compare team assignments
+    const currentDeveloper = currentData.developers.find(developer => developer.id === id);
+    const currentTeamId = currentDeveloper?.teamId;
+    const currentAssignedTeams = currentDeveloper?.assignedTeams || [];
+
+    // Update developers
     const updatedDevelopers = currentData.developers.map(developer =>
       developer.id === id ? { ...developer, ...developerData } : developer
     );
 
+    // Update teams based on team assignment changes
+    let updatedTeams = currentData.teams;
+
+    // Handle primary team assignment changes
+    if (currentTeamId !== developerData.teamId) {
+      // Remove developer from old team
+      if (currentTeamId) {
+        updatedTeams = updatedTeams.map(team => {
+          if (team.id === currentTeamId) {
+            return {
+              ...team,
+              developers: team.developers.filter(devId => devId !== id)
+            };
+          }
+          return team;
+        });
+      }
+
+      // Add developer to new team
+      if (developerData.teamId) {
+        updatedTeams = updatedTeams.map(team => {
+          if (team.id === developerData.teamId) {
+            return {
+              ...team,
+              developers: [...team.developers, id]
+            };
+          }
+          return team;
+        });
+      }
+    }
+
+    // Handle shared resource assignment changes
+    const newAssignedTeams = developerData.assignedTeams || [];
+    const teamsToRemove = currentAssignedTeams.filter(teamId => !newAssignedTeams.includes(teamId));
+    const teamsToAdd = newAssignedTeams.filter(teamId => !currentAssignedTeams.includes(teamId));
+
+    // Remove developer from teams no longer assigned
+    teamsToRemove.forEach(teamId => {
+      updatedTeams = updatedTeams.map(team => {
+        if (team.id === teamId) {
+          return {
+            ...team,
+            sharedResources: team.sharedResources.filter(devId => devId !== id)
+          };
+        }
+        return team;
+      });
+    });
+
+    // Add developer to newly assigned teams
+    teamsToAdd.forEach(teamId => {
+      updatedTeams = updatedTeams.map(team => {
+        if (team.id === teamId) {
+          return {
+            ...team,
+            sharedResources: [...team.sharedResources, id]
+          };
+        }
+        return team;
+      });
+    });
+
     const updatedData: TeamData = {
       ...currentData,
+      teams: updatedTeams,
       developers: updatedDevelopers
     };
 
@@ -192,7 +324,7 @@ export class TeamManagementService {
 
   // ==================== SKILLS CRUD OPERATIONS ====================
 
-  addTechSkill(skillData: SkillFormData): void {
+  addTechSkill(skillData: SkillFormData, oldSkillName?: string): void {
     const currentData = this.teamDataService.getCurrentTeamData();
     if (!currentData) return;
 
@@ -208,15 +340,40 @@ export class TeamManagementService {
       }
     };
 
+    // If this is an update (oldSkillName provided), remove the old skill name
+    if (oldSkillName && oldSkillName !== skillData.name) {
+      const { [oldSkillName]: removed, ...remainingTechSkills } = updatedSkillDefinitions.techSkills;
+      updatedSkillDefinitions.techSkills = remainingTechSkills;
+    }
+
+    // Update developers to reflect the skill name change
+    let updatedDevelopers = currentData.developers;
+    if (oldSkillName && oldSkillName !== skillData.name) {
+      updatedDevelopers = currentData.developers.map(developer => {
+        if (developer.techSkills[oldSkillName] !== undefined) {
+          const { [oldSkillName]: oldRating, ...remainingSkills } = developer.techSkills;
+          return {
+            ...developer,
+            techSkills: {
+              ...remainingSkills,
+              [skillData.name]: oldRating
+            }
+          };
+        }
+        return developer;
+      });
+    }
+
     const updatedData: TeamData = {
       ...currentData,
-      skillDefinitions: updatedSkillDefinitions
+      skillDefinitions: updatedSkillDefinitions,
+      developers: updatedDevelopers
     };
 
     this.teamDataService.updateTeamData(updatedData);
   }
 
-  addAppSkill(skillData: SkillFormData): void {
+  addAppSkill(skillData: SkillFormData, oldSkillName?: string): void {
     const currentData = this.teamDataService.getCurrentTeamData();
     if (!currentData) return;
 
@@ -232,9 +389,34 @@ export class TeamManagementService {
       }
     };
 
+    // If this is an update (oldSkillName provided), remove the old skill name
+    if (oldSkillName && oldSkillName !== skillData.name) {
+      const { [oldSkillName]: removed, ...remainingAppSkills } = updatedSkillDefinitions.appSkills;
+      updatedSkillDefinitions.appSkills = remainingAppSkills;
+    }
+
+    // Update developers to reflect the skill name change
+    let updatedDevelopers = currentData.developers;
+    if (oldSkillName && oldSkillName !== skillData.name) {
+      updatedDevelopers = currentData.developers.map(developer => {
+        if (developer.appSkills[oldSkillName] !== undefined) {
+          const { [oldSkillName]: oldRating, ...remainingSkills } = developer.appSkills;
+          return {
+            ...developer,
+            appSkills: {
+              ...remainingSkills,
+              [skillData.name]: oldRating
+            }
+          };
+        }
+        return developer;
+      });
+    }
+
     const updatedData: TeamData = {
       ...currentData,
-      skillDefinitions: updatedSkillDefinitions
+      skillDefinitions: updatedSkillDefinitions,
+      developers: updatedDevelopers
     };
 
     this.teamDataService.updateTeamData(updatedData);

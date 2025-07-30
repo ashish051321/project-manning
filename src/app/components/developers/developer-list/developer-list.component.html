@@ -1,1 +1,166 @@
-<p>developer-list works!</p>
+<div class="developer-list-container">
+  <div class="page-header">
+    <h1>Developers</h1>
+    <button class="btn-primary" (click)="addDeveloper()">
+      <span>+</span> Add Developer
+    </button>
+  </div>
+
+  <div class="content-area">
+    <div class="loading-spinner" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading developers...</p>
+    </div>
+
+    <div class="developers-table" *ngIf="!loading">
+      <div class="table-header">
+        <div class="header-cell">Developer</div>
+        <div class="header-cell">Type</div>
+        <div class="header-cell">Team Assignment</div>
+        <div class="header-cell">Skills</div>
+        <div class="header-cell">Availability</div>
+        <div class="header-cell">Actions</div>
+      </div>
+
+      <div class="table-body">
+        <div class="table-row" *ngFor="let developer of developers">
+          <div class="table-cell">
+            <div class="developer-info">
+              <div class="developer-avatar">👨‍💻</div>
+              <div class="developer-details">
+                <h3>{{ developer.name }}</h3>
+                <span class="developer-id">ID: {{ developer.id }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="table-cell">
+            <div class="developer-type">
+              <span class="type-badge" [class]="getDeveloperTypeClass(developer)">
+                {{ getDeveloperType(developer) }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="table-cell">
+            <div class="team-assignment">
+              <div class="primary-team" *ngIf="!developer.isSharedResource">
+                <span class="team-name">{{ getTeamName(developer.teamId) }}</span>
+                <span class="manager-name">{{ getManagerName(developer.teamId) }}</span>
+              </div>
+              <div class="shared-teams" *ngIf="developer.isSharedResource">
+                <div class="teams-list">
+                  {{ getAssignedTeamNames(developer) }}
+                </div>
+                <div class="teams-count" *ngIf="getSharedTeams(developer).length > 0">
+                  {{ getSharedTeams(developer).length }} teams
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="table-cell">
+            <div class="skills-info">
+              <div class="skills-overview">
+                <div class="skill-count">
+                  <span class="count-badge">{{ getSkillCount(developer) }}</span>
+                  <span class="count-label">Tech Skills</span>
+                </div>
+                <div class="app-count">
+                  <span class="count-badge">{{ getAppCount(developer) }}</span>
+                  <span class="count-label">Apps</span>
+                </div>
+              </div>
+              <div class="top-skills" *ngIf="getTopSkills(developer).length > 0">
+                {{ getTopSkills(developer).join(', ') }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="table-cell">
+            <div class="availability-info">
+              <div class="status-badge" [class]="getAvailabilityClass(developer)">
+                {{ getAvailabilityStatus(developer) }}
+              </div>
+              <div class="vacation-info" *ngIf="getVacationDays(developer) > 0">
+                <span class="vacation-badge">{{ getVacationDays(developer) }}</span>
+                <span class="vacation-label">Vacation Days</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="table-cell">
+            <div class="action-buttons">
+              <button class="btn-edit" (click)="editDeveloper(developer.id)">
+                ✏️ Edit
+              </button>
+              <button class="btn-delete" (click)="deleteDeveloper(developer.id)">
+                🗑️ Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="developers.length === 0">
+        <div class="empty-icon">👨‍💻</div>
+        <h3>No Developers Found</h3>
+        <p>Get started by adding your first developer to the organization.</p>
+        <button class="btn-primary" (click)="addDeveloper()">
+          Add First Developer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Developer Statistics -->
+  <div class="developer-stats" *ngIf="!loading && developers.length > 0">
+    <div class="stats-card">
+      <div class="stat-icon">👨‍💻</div>
+      <div class="stat-content">
+        <h3>{{ getDeveloperCount() }}</h3>
+        <p>Total Developers</p>
+      </div>
+    </div>
+    
+    <div class="stats-card">
+      <div class="stat-icon">🏢</div>
+      <div class="stat-content">
+        <h3>{{ getPrimaryDevelopers() }}</h3>
+        <p>Primary Members</p>
+      </div>
+    </div>
+    
+    <div class="stats-card">
+      <div class="stat-icon">🔄</div>
+      <div class="stat-content">
+        <h3>{{ getSharedResources() }}</h3>
+        <p>Shared Resources</p>
+      </div>
+    </div>
+
+    <div class="stats-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-content">
+        <h3>{{ getActiveDevelopers() }}</h3>
+        <p>Active Developers</p>
+      </div>
+    </div>
+
+    <div class="stats-card">
+      <div class="stat-icon">🏖️</div>
+      <div class="stat-content">
+        <h3>{{ getDevelopersWithVacations() }}</h3>
+        <p>On Vacation</p>
+      </div>
+    </div>
+
+    <div class="stats-card">
+      <div class="stat-icon">⚠️</div>
+      <div class="stat-content">
+        <h3>{{ getUnassignedDevelopers() }}</h3>
+        <p>Unassigned</p>
+      </div>
+    </div>
+  </div>
+</div>

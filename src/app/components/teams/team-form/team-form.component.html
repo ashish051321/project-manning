@@ -1,1 +1,190 @@
-<p>team-form works!</p>
+<div class="team-form-container">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Edit Team' : 'Add New Team' }}</h1>
+    <button class="btn-secondary" (click)="onCancel()">
+      ← Back to Teams
+    </button>
+  </div>
+
+  <div class="content-area">
+    <div class="loading-spinner" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading team data...</p>
+    </div>
+
+    <form [formGroup]="teamForm" (ngSubmit)="onSubmit()" *ngIf="!loading" class="team-form">
+      <div class="form-section">
+        <h2>Basic Information</h2>
+        
+        <div class="form-group">
+          <label for="name">Team Name *</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            placeholder="Enter team name"
+            [class.invalid]="isFieldInvalid('name')"
+          >
+          <div class="error-message" *ngIf="isFieldInvalid('name')">
+            {{ getFieldError('name') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description *</label>
+          <textarea 
+            id="description" 
+            formControlName="description" 
+            placeholder="Describe the team's purpose and responsibilities"
+            rows="3"
+            [class.invalid]="isFieldInvalid('description')"
+          ></textarea>
+          <div class="error-message" *ngIf="isFieldInvalid('description')">
+            {{ getFieldError('description') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="manager">Team Manager</label>
+          <select id="manager" formControlName="managerId">
+            <option value="">Select a manager (optional)</option>
+            <option *ngFor="let manager of managers" [value]="manager.id">
+              {{ manager.name }} - {{ manager.role }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Team Members</h2>
+        
+        <div class="members-section">
+          <div class="member-type">
+            <h3>Primary Developers</h3>
+            <p class="section-description">Developers who are primarily assigned to this team</p>
+            
+            <div class="member-selection">
+              <div class="available-members">
+                <h4>Available Developers</h4>
+                <div class="member-list">
+                  <div 
+                    *ngFor="let developer of getAvailableDevelopers()" 
+                    class="member-item available"
+                    (click)="addDeveloper(developer.id)"
+                  >
+                    <div class="member-avatar">👨‍💻</div>
+                    <div class="member-info">
+                      <span class="member-name">{{ developer.name }}</span>
+                      <span class="member-skills">
+                        {{ getObjectKeys(developer.techSkills).join(', ') }}
+                      </span>
+                    </div>
+                    <button type="button" class="btn-add">+ Add</button>
+                  </div>
+                  <div class="no-members" *ngIf="getAvailableDevelopers().length === 0">
+                    No available developers
+                  </div>
+                </div>
+              </div>
+
+              <div class="selected-members">
+                <h4>Selected Developers</h4>
+                <div class="member-list">
+                  <div 
+                    *ngFor="let developer of getSelectedDevelopers()" 
+                    class="member-item selected"
+                  >
+                    <div class="member-avatar">👨‍💻</div>
+                    <div class="member-info">
+                      <span class="member-name">{{ developer.name }}</span>
+                      <span class="member-skills">
+                        {{ getObjectKeys(developer.techSkills).join(', ') }}
+                      </span>
+                    </div>
+                    <button 
+                      type="button" 
+                      class="btn-remove"
+                      (click)="removeDeveloper(developer.id)"
+                    >
+                      × Remove
+                    </button>
+                  </div>
+                  <div class="no-members" *ngIf="getSelectedDevelopers().length === 0">
+                    No developers selected
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="member-type">
+            <h3>Shared Resources</h3>
+            <p class="section-description">Developers who work across multiple teams</p>
+            
+            <div class="member-selection">
+              <div class="available-members">
+                <h4>Available Shared Resources</h4>
+                <div class="member-list">
+                  <div 
+                    *ngFor="let developer of getAvailableSharedResources()" 
+                    class="member-item available shared"
+                    (click)="addSharedResource(developer.id)"
+                  >
+                    <div class="member-avatar">🔄</div>
+                    <div class="member-info">
+                      <span class="member-name">{{ developer.name }}</span>
+                      <span class="member-skills">
+                        {{ getObjectKeys(developer.techSkills).join(', ') }}
+                      </span>
+                    </div>
+                    <button type="button" class="btn-add">+ Add</button>
+                  </div>
+                  <div class="no-members" *ngIf="getAvailableSharedResources().length === 0">
+                    No available shared resources
+                  </div>
+                </div>
+              </div>
+
+              <div class="selected-members">
+                <h4>Selected Shared Resources</h4>
+                <div class="member-list">
+                  <div 
+                    *ngFor="let developer of getSelectedSharedResources()" 
+                    class="member-item selected shared"
+                  >
+                    <div class="member-avatar">🔄</div>
+                    <div class="member-info">
+                      <span class="member-name">{{ developer.name }}</span>
+                      <span class="member-skills">
+                        {{ getObjectKeys(developer.techSkills).join(', ') }}
+                      </span>
+                    </div>
+                    <button 
+                      type="button" 
+                      class="btn-remove"
+                      (click)="removeSharedResource(developer.id)"
+                    >
+                      × Remove
+                    </button>
+                  </div>
+                  <div class="no-members" *ngIf="getSelectedSharedResources().length === 0">
+                    No shared resources selected
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">
+          Cancel
+        </button>
+        <button type="submit" class="btn-submit" [disabled]="teamForm.invalid">
+          {{ isEditMode ? 'Update Team' : 'Create Team' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

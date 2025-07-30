@@ -1,1 +1,149 @@
-<p>manager-form works!</p>
+<div class="manager-form-container">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Edit Manager' : 'Add New Manager' }}</h1>
+    <button class="btn-secondary" (click)="onCancel()">
+      ← Back to Managers
+    </button>
+  </div>
+
+  <div class="content-area">
+    <div class="loading-spinner" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading manager data...</p>
+    </div>
+
+    <form [formGroup]="managerForm" (ngSubmit)="onSubmit()" *ngIf="!loading" class="manager-form">
+      <div class="form-section">
+        <h2>Basic Information</h2>
+        
+        <div class="form-group">
+          <label for="name">Manager Name *</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            placeholder="Enter manager name"
+            [class.invalid]="isFieldInvalid('name')"
+          >
+          <div class="error-message" *ngIf="isFieldInvalid('name')">
+            {{ getFieldError('name') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="role">Role *</label>
+          <input 
+            type="text" 
+            id="role" 
+            formControlName="role" 
+            placeholder="Enter manager role (e.g., Senior Manager, Team Lead)"
+            [class.invalid]="isFieldInvalid('role')"
+          >
+          <div class="error-message" *ngIf="isFieldInvalid('role')">
+            {{ getFieldError('role') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description *</label>
+          <textarea 
+            id="description" 
+            formControlName="description" 
+            placeholder="Describe the manager's responsibilities and expertise"
+            rows="3"
+            [class.invalid]="isFieldInvalid('description')"
+          ></textarea>
+          <div class="error-message" *ngIf="isFieldInvalid('description')">
+            {{ getFieldError('description') }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Team Assignments</h2>
+        
+        <div class="teams-section">
+          <div class="teams-overview">
+            <div class="overview-card">
+              <div class="overview-icon">🏢</div>
+              <div class="overview-content">
+                <h3>{{ getTeamCount() }}</h3>
+                <p>Selected Teams</p>
+              </div>
+            </div>
+            
+            <div class="overview-card">
+              <div class="overview-icon">📋</div>
+              <div class="overview-content">
+                <h3>{{ getAvailableTeamCount() }}</h3>
+                <p>Available Teams</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="team-selection">
+            <div class="available-teams">
+              <h3>Available Teams</h3>
+              <p class="section-description">Teams that can be assigned to this manager</p>
+              
+              <div class="team-list">
+                <div 
+                  *ngFor="let team of getAvailableTeams()" 
+                  class="team-item available"
+                  (click)="addTeam(team.id)"
+                >
+                  <div class="team-avatar">🏢</div>
+                  <div class="team-info">
+                    <span class="team-name">{{ team.name }}</span>
+                    <span class="team-description">{{ team.description }}</span>
+                  </div>
+                  <button type="button" class="btn-add">+ Assign</button>
+                </div>
+                <div class="no-teams" *ngIf="getAvailableTeams().length === 0">
+                  No available teams to assign
+                </div>
+              </div>
+            </div>
+
+            <div class="selected-teams">
+              <h3>Assigned Teams</h3>
+              <p class="section-description">Teams currently assigned to this manager</p>
+              
+              <div class="team-list">
+                <div 
+                  *ngFor="let team of getSelectedTeams()" 
+                  class="team-item selected"
+                >
+                  <div class="team-avatar">🏢</div>
+                  <div class="team-info">
+                    <span class="team-name">{{ team.name }}</span>
+                    <span class="team-description">{{ team.description }}</span>
+                  </div>
+                  <button 
+                    type="button" 
+                    class="btn-remove"
+                    (click)="removeTeam(team.id)"
+                  >
+                    × Remove
+                  </button>
+                </div>
+                <div class="no-teams" *ngIf="getSelectedTeams().length === 0">
+                  No teams assigned yet
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">
+          Cancel
+        </button>
+        <button type="submit" class="btn-submit" [disabled]="managerForm.invalid">
+          {{ isEditMode ? 'Update Manager' : 'Create Manager' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -52,7 +52,7 @@ export class ManagerListComponent implements OnInit, OnDestroy {
   }
 
   deleteManager(managerId: string): void {
-    if (confirm('Are you sure you want to delete this manager? This action cannot be undone.')) {
+    if (confirm('Are you sure you want to delete this manager? This will remove all team assignments.')) {
       this.teamManagementService.deleteManager(managerId);
       // Data will be automatically updated through the subscription
     }
@@ -70,6 +70,19 @@ export class ManagerListComponent implements OnInit, OnDestroy {
     return teamNames.join(', ') || 'No teams assigned';
   }
 
+  getAssignedTeams(managerId: string): Team[] {
+    return this.teams.filter(team => team.managerId === managerId);
+  }
+
+  getAssignedTeamNames(managerId: string): string {
+    const assignedTeams = this.getAssignedTeams(managerId);
+    return assignedTeams.map(team => team.name).join(', ') || 'No teams assigned';
+  }
+
+  getTeamCount(managerId: string): number {
+    return this.getAssignedTeams(managerId).length;
+  }
+
   refreshData(): void {
     this.loadData();
   }
@@ -78,7 +91,21 @@ export class ManagerListComponent implements OnInit, OnDestroy {
     return this.managers.length;
   }
 
-  getActiveTeamsCount(): number {
-    return this.teams.filter(team => team.managerId && team.managerId !== '').length;
+  getManagersWithTeams(): number {
+    return this.managers.filter(manager => 
+      this.getAssignedTeams(manager.id).length > 0
+    ).length;
+  }
+
+  getTotalTeams(): number {
+    return this.teams.length;
+  }
+
+  getUnassignedTeams(): Team[] {
+    return this.teams.filter(team => !team.managerId || team.managerId === '');
+  }
+
+  getUnassignedTeamCount(): number {
+    return this.getUnassignedTeams().length;
   }
 }

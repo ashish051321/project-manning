@@ -1,321 +1,339 @@
 {
   "organization": {
-    "name": "ProjectManning Organization",
-    "version": "1.0.0",
-    "lastUpdated": "2024-01-01"
+    "name": "Project Manning",
+    "version": "1.0",
+    "lastUpdated": "2024-01-15"
   },
   "managers": [
     {
-      "id": "mgr-001",
-      "name": "Manager 1",
+      "id": "mgr_001",
+      "name": "Vivek Hanwatkar",
       "role": "Team Manager",
-      "teams": ["team-001", "team-002", "team-003"],
-      "description": "Leads multiple teams"
+      "teams": ["team_001"],
+      "description": "Manager of Alpha Squad"
+    },
+    {
+      "id": "mgr_002",
+      "name": "Ashish Mishra",
+      "role": "Team Manager",
+      "teams": ["team_002"],
+      "description": "Manager of Beta Warriors"
     }
   ],
   "teams": [
     {
-      "id": "team-001",
-      "name": "Team 1",
-      "managerId": "mgr-001",
-      "developers": ["dev-001", "dev-002"],
-      "sharedResources": ["dev-003"],
-      "description": "Primary development team"
-    },
-    {
-      "id": "team-002", 
-      "name": "Team 2",
-      "managerId": "mgr-001",
-      "developers": ["dev-004", "dev-005"],
+      "id": "team_001",
+      "name": "Alpha Squad",
+      "managerId": "mgr_001",
+      "developers": ["dev_001", "dev_002", "dev_003", "dev_004", "dev_005"],
       "sharedResources": [],
-      "description": "Secondary development team"
+      "description": "Database-focused team"
     },
     {
-      "id": "team-003",
-      "name": "Team 3", 
-      "managerId": "mgr-001",
-      "developers": ["dev-006"],
-      "sharedResources": ["dev-003"],
-      "description": "Specialized team"
+      "id": "team_002",
+      "name": "Beta Warriors",
+      "managerId": "mgr_002",
+      "developers": ["dev_006", "dev_007", "dev_008", "dev_009", "dev_010", "dev_011", "dev_012", "dev_013", "dev_014", "dev_015"],
+      "sharedResources": [],
+      "description": "Full-stack development team"
     }
   ],
   "developers": [
     {
-      "id": "dev-001",
-      "name": "Developer 1",
-      "teamId": "team-001",
+      "id": "dev_001",
+      "name": "Ashish Madhav-Deodikar",
+      "teamId": "team_001",
       "isSharedResource": false,
+      "assignedTeams": [],
       "techSkills": {
-        "Java": 7,
-        "Angular": 8,
-        "Data": 6,
-        "CICD": 7
+        "Database": 8
       },
       "appSkills": {
-        "App 1": 8,
-        "App 2": 7,
-        "App 3": 9
+        "Customer Portal": 8,
+        "Payment Gateway": 6
       },
       "availability": {
         "status": "active",
-        "vacationDays": [
-          {
-            "type": "range",
-            "startDate": "2024-07-15",
-            "endDate": "2024-07-22",
-            "description": "Summer vacation"
-          },
-          {
-            "type": "single",
-            "date": "2024-12-25",
-            "description": "Christmas Day"
-          }
-        ]
+        "vacationDays": []
       }
     },
     {
-      "id": "dev-002",
-      "name": "Developer 2", 
-      "teamId": "team-001",
+      "id": "dev_002",
+      "name": "Sonal-A Agrawal",
+      "teamId": "team_001",
       "isSharedResource": false,
+      "assignedTeams": [],
+      "techSkills": {
+        "Database": 7
+      },
+      "appSkills": {},
+      "availability": {
+        "status": "active",
+        "vacationDays": []
+      }
+    },
+    {
+      "id": "dev_003",
+      "name": "Sugandha-Prakash Pawar",
+      "teamId": "team_001",
+      "isSharedResource": false,
+      "assignedTeams": [],
+      "techSkills": {
+        "Database": 6
+      },
+      "appSkills": {},
+      "availability": {
+        "status": "active",
+        "vacationDays": []
+      }
+    },
+    {
+      "id": "dev_004",
+      "name": "Supriya-Suresh Kolhe",
+      "teamId": "team_001",
+      "isSharedResource": false,
+      "assignedTeams": [],
+      "techSkills": {
+        "Database": 7
+      },
+      "appSkills": {},
+      "availability": {
+        "status": "active",
+        "vacationDays": []
+      }
+    },
+    {
+      "id": "dev_005",
+      "name": "Tanya-A Jaiswal",
+      "teamId": "team_001",
+      "isSharedResource": false,
+      "assignedTeams": [],
+      "techSkills": {
+        "Database": 8
+      },
+      "appSkills": {},
+      "availability": {
+        "status": "active",
+        "vacationDays": []
+      }
+    },
+    {
+      "id": "dev_006",
+      "name": "Sidharth Jain",
+      "teamId": "team_002",
+      "isSharedResource": false,
+      "assignedTeams": [],
       "techSkills": {
         "Java": 8,
-        "Angular": 6,
-        "Data": 9,
-        "CICD": 5
+        "Angular": 7
       },
       "appSkills": {
-        "App 1": 6,
-        "App 2": 8,
-        "App 3": 7
+        "Customer Portal": 9,
+        "Reporting Dashboard": 7
       },
       "availability": {
         "status": "active",
-        "vacationDays": [
-          {
-            "type": "range",
-            "startDate": "2024-08-10",
-            "endDate": "2024-08-17",
-            "description": "Family vacation"
-          },
-          {
-            "type": "single",
-            "date": "2024-11-28",
-            "description": "Thanksgiving"
-          },
-          {
-            "type": "single",
-            "date": "2024-12-31",
-            "description": "New Year's Eve"
-          }
-        ]
+        "vacationDays": []
       }
     },
     {
-      "id": "dev-003",
-      "name": "Developer 3",
-      "teamId": null,
-      "isSharedResource": true,
-      "assignedTeams": ["team-001", "team-003"],
-      "techSkills": {
-        "Java": 9,
-        "Angular": 7,
-        "Data": 8,
-        "CICD": 9
-      },
-      "appSkills": {
-        "App 1": 9,
-        "App 2": 8,
-        "App 3": 8
-      },
-      "availability": {
-        "status": "active",
-        "vacationDays": [
-          {
-            "type": "range",
-            "startDate": "2024-06-20",
-            "endDate": "2024-06-27",
-            "description": "Conference attendance"
-          },
-          {
-            "type": "range",
-            "startDate": "2024-09-15",
-            "endDate": "2024-09-22",
-            "description": "Personal time off"
-          },
-          {
-            "type": "single",
-            "date": "2024-12-24",
-            "description": "Christmas Eve"
-          }
-        ]
-      }
-    },
-    {
-      "id": "dev-004",
-      "name": "Developer 4",
-      "teamId": "team-002",
+      "id": "dev_007",
+      "name": "Ankita Muwal",
+      "teamId": "team_002",
       "isSharedResource": false,
+      "assignedTeams": [],
+      "techSkills": {
+        "Java": 7
+      },
+      "appSkills": {},
+      "availability": {
+        "status": "active",
+        "vacationDays": []
+      }
+    },
+    {
+      "id": "dev_008",
+      "name": "Vishal Dasa",
+      "teamId": "team_002",
+      "isSharedResource": false,
+      "assignedTeams": [],
+      "techSkills": {
+        "Java": 6
+      },
+      "appSkills": {},
+      "availability": {
+        "status": "active",
+        "vacationDays": []
+      }
+    },
+    {
+      "id": "dev_009",
+      "name": "Aniket Chaudhari",
+      "teamId": "team_002",
+      "isSharedResource": false,
+      "assignedTeams": [],
+      "techSkills": {
+        "Java": 8,
+        "Angular": 6
+      },
+      "appSkills": {
+        "Payment Gateway": 8,
+        "Inventory Management": 7
+      },
+      "availability": {
+        "status": "active",
+        "vacationDays": []
+      }
+    },
+    {
+      "id": "dev_010",
+      "name": "Haritha",
+      "teamId": "team_002",
+      "isSharedResource": false,
+      "assignedTeams": [],
+      "techSkills": {
+        "QA Automation": 8
+      },
+      "appSkills": {},
+      "availability": {
+        "status": "active",
+        "vacationDays": []
+      }
+    },
+    {
+      "id": "dev_011",
+      "name": "Karol",
+      "teamId": "team_002",
+      "isSharedResource": false,
+      "assignedTeams": [],
+      "techSkills": {
+        "Java": 7
+      },
+      "appSkills": {},
+      "availability": {
+        "status": "active",
+        "vacationDays": []
+      }
+    },
+    {
+      "id": "dev_012",
+      "name": "Jaspreet-A Singh",
+      "teamId": "team_002",
+      "isSharedResource": false,
+      "assignedTeams": [],
+      "techSkills": {
+        "Angular": 8
+      },
+      "appSkills": {
+        "Customer Portal": 7,
+        "Reporting Dashboard": 8
+      },
+      "availability": {
+        "status": "active",
+        "vacationDays": []
+      }
+    },
+    {
+      "id": "dev_013",
+      "name": "Jakub Chudy",
+      "teamId": "team_002",
+      "isSharedResource": false,
+      "assignedTeams": [],
+      "techSkills": {
+        "QA Automation": 7
+      },
+      "appSkills": {},
+      "availability": {
+        "status": "active",
+        "vacationDays": []
+      }
+    },
+    {
+      "id": "dev_014",
+      "name": "Priyansi",
+      "teamId": "team_002",
+      "isSharedResource": false,
+      "assignedTeams": [],
       "techSkills": {
         "Java": 6,
-        "Angular": 9,
-        "Data": 5,
-        "CICD": 6
+        "Angular": 7
       },
-      "appSkills": {
-        "App 1": 7,
-        "App 2": 9,
-        "App 3": 6
-      },
+      "appSkills": {},
       "availability": {
         "status": "active",
-        "vacationDays": [
-          {
-            "type": "range",
-            "startDate": "2024-05-20",
-            "endDate": "2024-05-25",
-            "description": "Spring break"
-          },
-          {
-            "type": "single",
-            "date": "2024-07-04",
-            "description": "Independence Day"
-          },
-          {
-            "type": "single",
-            "date": "2024-12-26",
-            "description": "Boxing Day"
-          }
-        ]
+        "vacationDays": []
       }
     },
     {
-      "id": "dev-005",
-      "name": "Developer 5",
-      "teamId": "team-002", 
+      "id": "dev_015",
+      "name": "Ashwini Tupe",
+      "teamId": "team_002",
       "isSharedResource": false,
+      "assignedTeams": [],
       "techSkills": {
-        "Java": 7,
-        "Angular": 7,
-        "Data": 7,
-        "CICD": 8
+        "Java": 7
       },
-      "appSkills": {
-        "App 1": 8,
-        "App 2": 7,
-        "App 3": 8
-      },
+      "appSkills": {},
       "availability": {
         "status": "active",
-        "vacationDays": [
-          {
-            "type": "range",
-            "startDate": "2024-04-15",
-            "endDate": "2024-04-20",
-            "description": "Easter break"
-          },
-          {
-            "type": "single",
-            "date": "2024-09-02",
-            "description": "Labor Day"
-          },
-          {
-            "type": "range",
-            "startDate": "2024-12-20",
-            "endDate": "2024-12-27",
-            "description": "Holiday season"
-          }
-        ]
-      }
-    },
-    {
-      "id": "dev-006",
-      "name": "Developer 6",
-      "teamId": "team-003",
-      "isSharedResource": false,
-      "techSkills": {
-        "Java": 8,
-        "Angular": 6,
-        "Data": 9,
-        "CICD": 7
-      },
-      "appSkills": {
-        "App 1": 7,
-        "App 2": 8,
-        "App 3": 9
-      },
-      "availability": {
-        "status": "active",
-        "vacationDays": [
-          {
-            "type": "range",
-            "startDate": "2024-03-15",
-            "endDate": "2024-03-22",
-            "description": "Spring vacation"
-          },
-          {
-            "type": "single",
-            "date": "2024-05-27",
-            "description": "Memorial Day"
-          },
-          {
-            "type": "single",
-            "date": "2024-10-14",
-            "description": "Columbus Day"
-          }
-        ]
+        "vacationDays": []
       }
     }
   ],
   "skillDefinitions": {
     "techSkills": {
       "Java": {
-        "description": "Java programming language",
-        "scale": "0-10",
+        "description": "Java programming language and related frameworks",
+        "scale": "1-10",
         "category": "Programming Language"
       },
       "Angular": {
-        "description": "Angular framework",
-        "scale": "0-10", 
+        "description": "Angular framework for building web applications",
+        "scale": "1-10",
         "category": "Frontend Framework"
       },
-      "Data": {
-        "description": "Data analysis and management",
-        "scale": "0-10",
-        "category": "Data Management"
+      "Database": {
+        "description": "Database design, SQL, and data management",
+        "scale": "1-10",
+        "category": "Database"
       },
-      "CICD": {
-        "description": "Continuous Integration/Continuous Deployment",
-        "scale": "0-10",
-        "category": "DevOps"
+      "QA Automation": {
+        "description": "Quality Assurance and test automation",
+        "scale": "1-10",
+        "category": "Testing"
       }
     },
     "appSkills": {
-      "App 1": {
-        "description": "Application 1 specific knowledge",
-        "scale": "0-10",
-        "category": "Application Specific"
+      "Customer Portal": {
+        "description": "Customer-facing web portal application",
+        "scale": "1-10",
+        "category": "Web Application"
       },
-      "App 2": {
-        "description": "Application 2 specific knowledge", 
-        "scale": "0-10",
-        "category": "Application Specific"
+      "Payment Gateway": {
+        "description": "Payment processing and transaction management system",
+        "scale": "1-10",
+        "category": "Financial System"
       },
-      "App 3": {
-        "description": "Application 3 specific knowledge",
-        "scale": "0-10",
-        "category": "Application Specific"
+      "Inventory Management": {
+        "description": "Stock and inventory tracking system",
+        "scale": "1-10",
+        "category": "Business System"
+      },
+      "Reporting Dashboard": {
+        "description": "Analytics and reporting platform",
+        "scale": "1-10",
+        "category": "Analytics"
       }
     }
   },
   "metadata": {
     "skillScales": {
-      "techSkillsScale": "0-10",
-      "appSkillsScale": "0-10"
+      "techSkillsScale": "1-10",
+      "appSkillsScale": "1-10"
     },
-    "defaultTechSkillRating": 7,
-    "defaultAppSkillRating": 8,
-    "sharedResourceIndicator": "isSharedResource",
+    "defaultTechSkillRating": 5,
+    "defaultAppSkillRating": 5,
+    "sharedResourceIndicator": "SR",
     "vacationTracking": true
   }
 }
