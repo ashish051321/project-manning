@@ -28,6 +28,7 @@
         (change)="onApplicationChange()"
         class="form-select">
         <option value="">Select Application</option>
+        <option value="all">All Apps</option>
         <option *ngFor="let app of applications" [value]="app">
           {{ app }}
         </option>
@@ -53,7 +54,12 @@
   <div class="risk-legend" *ngIf="selectedTeamId && selectedApplication">
     <div class="legend-item">
       <div class="legend-color risk"></div>
-      <span>No Support Available - All developers with this application skill are on vacation</span>
+      <span *ngIf="selectedApplication === 'all'">
+        No Support Available - All developers for one or more applications are on vacation
+      </span>
+      <span *ngIf="selectedApplication !== 'all'">
+        No Support Available - All developers with this application skill are on vacation
+      </span>
     </div>
   </div>
 
@@ -74,7 +80,7 @@
         [class.at-risk]="day.isAtRisk"
         [class.clickable]="day.isAtRisk && day.unavailableDevelopers.length > 0"
         (click)="onDateClick(day)"
-        [title]="day.isAtRisk ? getUnavailableDevelopersText(day.unavailableDevelopers) : ''">
+        [title]="getTooltipText(day)">
         
         <div class="day-number">{{ day.date.getDate() }}</div>
         
@@ -83,6 +89,9 @@
           <span class="risk-icon">⚠️</span>
           <div class="developer-count" *ngIf="day.unavailableDevelopers.length > 1">
             {{ day.unavailableDevelopers.length }}
+          </div>
+          <div class="app-count" *ngIf="selectedApplication === 'all' && day.affectedApps.length > 1">
+            {{ day.affectedApps.length }} apps
           </div>
         </div>
       </div>
@@ -106,6 +115,90 @@
   <div class="no-risk-state" *ngIf="!loading && selectedTeamId && selectedApplication && calendarDays.length > 0 && !hasAnyRiskDays()">
     <div class="no-risk-icon">✅</div>
     <h3>No Support Risks Detected</h3>
-    <p>All developers with {{ selectedApplication }} skills are available for the selected period</p>
+    <p *ngIf="selectedApplication === 'all'">
+      All developers for all team applications are available for the selected period
+    </p>
+    <p *ngIf="selectedApplication !== 'all'">
+      All developers with {{ selectedApplication }} skills are available for the selected period
+    </p>
+  </div>
+
+  <!-- Team Applications Table -->
+  <div class="team-applications-section" *ngIf="selectedTeamId && !loading">
+    <div class="section-header">
+      <h2>Team Applications & Responsibilities</h2>
+      <p>Applications owned by {{ getTeamName(selectedTeamId) }} and team members responsible for each</p>
+    </div>
+
+    <div class="applications-table-container" *ngIf="hasTeamApplications()">
+      <table class="applications-table">
+        <thead>
+          <tr>
+            <th>Application</th>
+            <th>Team Members</th>
+            <th>Total Members</th>
+            <th>Skill Distribution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let appData of getTeamApplicationsWithDevelopers()">
+            <td class="app-name">
+              <div class="app-info">
+                <span class="app-title">{{ appData.application }}</span>
+              </div>
+            </td>
+            <td class="developers-list">
+              <div class="developer-items">
+                <div 
+                  class="developer-item" 
+                  *ngFor="let developer of appData.developers"
+                  [class.shared-resource]="developer.isSharedResource">
+                  <span class="developer-name clickable" (click)="navigateToDeveloper(developer.id)">
+                    {{ developer.name }}
+                  </span>
+                  <span class="skill-level" [class]="getSkillLevelClass(getDeveloperSkillLevel(developer, appData.application))">
+                    {{ getDeveloperSkillLevel(developer, appData.application) }}/10
+                  </span>
+                  <span class="resource-type" *ngIf="developer.isSharedResource">SR</span>
+                </div>
+              </div>
+            </td>
+            <td class="total-count">
+              <span class="count-badge">{{ appData.totalDevelopers }}</span>
+            </td>
+            <td class="skill-distribution">
+              <div class="skill-bars">
+                <div class="skill-bar expert" 
+                     [style.width.%]="getSkillDistribution(appData.developers, appData.application, 'expert')"
+                     [title]="getSkillDistributionTooltip(appData.developers, appData.application, 'expert')">
+                  <span class="skill-label">Expert</span>
+                </div>
+                <div class="skill-bar advanced" 
+                     [style.width.%]="getSkillDistribution(appData.developers, appData.application, 'advanced')"
+                     [title]="getSkillDistributionTooltip(appData.developers, appData.application, 'advanced')">
+                  <span class="skill-label">Advanced</span>
+                </div>
+                <div class="skill-bar intermediate" 
+                     [style.width.%]="getSkillDistribution(appData.developers, appData.application, 'intermediate')"
+                     [title]="getSkillDistributionTooltip(appData.developers, appData.application, 'intermediate')">
+                  <span class="skill-label">Intermediate</span>
+                </div>
+                <div class="skill-bar beginner" 
+                     [style.width.%]="getSkillDistribution(appData.developers, appData.application, 'beginner')"
+                     [title]="getSkillDistributionTooltip(appData.developers, appData.application, 'beginner')">
+                  <span class="skill-label">Beginner</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="no-applications-state" *ngIf="!hasTeamApplications()">
+      <div class="no-applications-icon">📱</div>
+      <h3>No Applications Found</h3>
+      <p>This team doesn't have any developers with application skills assigned</p>
+    </div>
   </div>
 </div> 

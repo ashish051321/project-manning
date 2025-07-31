@@ -29,6 +29,7 @@ export class SupportAvailabilityComponent implements OnInit, OnDestroy {
     isToday: boolean;
     isAtRisk: boolean;
     unavailableDevelopers: Developer[];
+    affectedApps: string[];
   }> = [];
   
   private dataSubscription: Subscription | null = null;
@@ -54,6 +55,13 @@ export class SupportAvailabilityComponent implements OnInit, OnDestroy {
         this.teams = data.teams;
         this.developers = data.developers;
         this.applications = Object.keys(data.skillDefinitions.appSkills);
+        
+        // Auto-select first team and "All Apps" by default
+        if (this.teams.length > 0 && !this.selectedTeamId) {
+          this.selectedTeamId = this.teams[0].id;
+          this.selectedApplication = 'all';
+        }
+        
         this.generateCalendar();
       }
       this.loading = false;
@@ -116,40 +124,95 @@ export class SupportAvailabilityComponent implements OnInit, OnDestroy {
       const date = new Date(current);
       const isCurrentMonth = date.getMonth() === month;
       const isToday = this.isSameDate(date, new Date());
-      const { isAtRisk, unavailableDevelopers } = this.checkAvailabilityForDate(date);
+      const { isAtRisk, unavailableDevelopers, affectedApps } = this.checkAvailabilityForDate(date);
       
       this.calendarDays.push({
         date,
         isCurrentMonth,
         isToday,
         isAtRisk,
-        unavailableDevelopers
+        unavailableDevelopers,
+        affectedApps
       });
       
       current.setDate(current.getDate() + 1);
     }
   }
 
-  private checkAvailabilityForDate(date: Date): { isAtRisk: boolean, unavailableDevelopers: Developer[] } {
+  private checkAvailabilityForDate(date: Date): { 
+    isAtRisk: boolean, 
+    unavailableDevelopers: Developer[], 
+    affectedApps: string[] 
+  } {
     const teamDevelopers = this.getTeamDevelopers();
     const unavailableDevelopers: Developer[] = [];
+    const affectedApps: string[] = [];
     
-    for (const developer of teamDevelopers) {
-      if (this.hasApplicationSkill(developer, this.selectedApplication) && 
-          this.isDeveloperOnVacation(developer, date)) {
-        unavailableDevelopers.push(developer);
+    if (this.selectedApplication === 'all') {
+      // Check all applications owned by the team
+      const teamApps = this.getTeamApplications();
+      
+      for (const app of teamApps) {
+        const developersWithApp = teamDevelopers.filter(dev => 
+          this.hasApplicationSkill(dev, app)
+        );
+        
+        const unavailableForApp = developersWithApp.filter(dev => 
+          this.isDeveloperOnVacation(dev, date)
+        );
+        
+        // If all developers with this app are unavailable, the app is at risk
+        if (developersWithApp.length > 0 && unavailableForApp.length === developersWithApp.length) {
+          affectedApps.push(app);
+          // Add developers to unavailable list (avoid duplicates)
+          unavailableForApp.forEach(dev => {
+            if (!unavailableDevelopers.find(d => d.id === dev.id)) {
+              unavailableDevelopers.push(dev);
+            }
+          });
+        }
       }
+      
+      const isAtRisk = affectedApps.length > 0;
+      return { isAtRisk, unavailableDevelopers, affectedApps };
+    } else {
+      // Check specific application
+      for (const developer of teamDevelopers) {
+        if (this.hasApplicationSkill(developer, this.selectedApplication) && 
+            this.isDeveloperOnVacation(developer, date)) {
+          unavailableDevelopers.push(developer);
+        }
+      }
+      
+      // Check if all developers with this application skill are unavailable
+      const developersWithApp = teamDevelopers.filter(dev => 
+        this.hasApplicationSkill(dev, this.selectedApplication)
+      );
+      
+      const isAtRisk = developersWithApp.length > 0 && 
+                      unavailableDevelopers.length === developersWithApp.length;
+      
+      if (isAtRisk) {
+        affectedApps.push(this.selectedApplication);
+      }
+      
+      return { isAtRisk, unavailableDevelopers, affectedApps };
     }
+  }
+
+  private getTeamApplications(): string[] {
+    const teamDevelopers = this.getTeamDevelopers();
+    const teamApps = new Set<string>();
     
-    // Check if all developers with this application skill are unavailable
-    const developersWithApp = teamDevelopers.filter(dev => 
-      this.hasApplicationSkill(dev, this.selectedApplication)
-    );
+    teamDevelopers.forEach(developer => {
+      Object.keys(developer.appSkills).forEach(app => {
+        if (developer.appSkills[app] && developer.appSkills[app]! > 0) {
+          teamApps.add(app);
+        }
+      });
+    });
     
-    const isAtRisk = developersWithApp.length > 0 && 
-                    unavailableDevelopers.length === developersWithApp.length;
-    
-    return { isAtRisk, unavailableDevelopers };
+    return Array.from(teamApps);
   }
 
   private getTeamDevelopers(): Developer[] {
@@ -238,6 +301,7 @@ export class SupportAvailabilityComponent implements OnInit, OnDestroy {
   }
 
   getApplicationName(app: string): string {
+    if (app === 'all') return 'All Apps';
     return app || 'Select Application';
   }
 
@@ -247,7 +311,112 @@ export class SupportAvailabilityComponent implements OnInit, OnDestroy {
     return `${developers.length} developers unavailable`;
   }
 
+  getTooltipText(day: any): string {
+    if (!day.isAtRisk) return '';
+    
+    let tooltip = '';
+    
+    if (day.affectedApps.length > 0) {
+      tooltip += `Affected Apps: ${day.affectedApps.join(', ')}\n`;
+    }
+    
+    if (day.unavailableDevelopers.length > 0) {
+      const developerNames = day.unavailableDevelopers.map((dev: Developer) => dev.name);
+      tooltip += `People on leave: ${developerNames.join(', ')}`;
+    }
+    
+    return tooltip;
+  }
+
   hasAnyRiskDays(): boolean {
     return this.calendarDays.some(day => day.isAtRisk);
+  }
+
+  // Table methods for team applications and developers
+  getTeamApplicationsWithDevelopers(): Array<{
+    application: string;
+    developers: Developer[];
+    totalDevelopers: number;
+  }> {
+    if (!this.selectedTeamId) return [];
+    
+    const teamDevelopers = this.getTeamDevelopers();
+    const teamApps = this.getTeamApplications();
+    
+    return teamApps.map(app => {
+      const developersWithApp = teamDevelopers.filter(dev => 
+        this.hasApplicationSkill(dev, app)
+      );
+      
+      return {
+        application: app,
+        developers: developersWithApp,
+        totalDevelopers: developersWithApp.length
+      };
+    }).sort((a, b) => b.totalDevelopers - a.totalDevelopers); // Sort by number of developers (descending)
+  }
+
+  getDeveloperSkillLevel(developer: Developer, application: string): number {
+    return developer.appSkills[application] || 0;
+  }
+
+  getSkillLevelClass(skillLevel: number): string {
+    if (skillLevel >= 8) return 'expert';
+    if (skillLevel >= 6) return 'advanced';
+    if (skillLevel >= 4) return 'intermediate';
+    return 'beginner';
+  }
+
+  getSkillLevelText(skillLevel: number): string {
+    if (skillLevel >= 8) return 'Expert';
+    if (skillLevel >= 6) return 'Advanced';
+    if (skillLevel >= 4) return 'Intermediate';
+    return 'Beginner';
+  }
+
+  getSkillDistribution(developers: Developer[], application: string, skillLevel: string): number {
+    if (developers.length === 0) return 0;
+    
+    const developersWithSkill = developers.filter(dev => {
+      const skillValue = this.getDeveloperSkillLevel(dev, application);
+      const devSkillLevel = this.getSkillLevelClass(skillValue);
+      return devSkillLevel === skillLevel;
+    });
+    
+    return (developersWithSkill.length / developers.length) * 100;
+  }
+
+  getSkillDistributionTooltip(developers: Developer[], application: string, skillLevel: string): string {
+    if (developers.length === 0) return '';
+    
+    const developersWithSkill = developers.filter(dev => {
+      const skillValue = this.getDeveloperSkillLevel(dev, application);
+      const devSkillLevel = this.getSkillLevelClass(skillValue);
+      return devSkillLevel === skillLevel;
+    });
+    
+    const percentage = (developersWithSkill.length / developers.length) * 100;
+    const levelText = this.getSkillLevelText(this.getSkillLevelFromClass(skillLevel));
+    
+    if (developersWithSkill.length === 0) {
+      return `${levelText}: 0% (0 developers)`;
+    }
+    
+    const developerNames = developersWithSkill.map(dev => dev.name).join(', ');
+    return `${levelText}: ${percentage.toFixed(1)}% (${developersWithSkill.length} developer${developersWithSkill.length > 1 ? 's' : ''}) - ${developerNames}`;
+  }
+
+  getSkillLevelFromClass(skillLevelClass: string): number {
+    switch (skillLevelClass) {
+      case 'expert': return 8;
+      case 'advanced': return 6;
+      case 'intermediate': return 4;
+      case 'beginner': return 1;
+      default: return 0;
+    }
+  }
+
+  hasTeamApplications(): boolean {
+    return this.getTeamApplicationsWithDevelopers().length > 0;
   }
 } 

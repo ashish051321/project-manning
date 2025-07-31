@@ -264,6 +264,21 @@
       justify-content: center;
       font-weight: bold;
     }
+
+    .app-count {
+      background: #f39c12;
+      color: white;
+      font-size: 0.6rem;
+      padding: 1px 3px;
+      border-radius: 3px;
+      min-width: 12px;
+      height: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-left: 2px;
+    }
   }
 }
 
@@ -345,6 +360,257 @@
   }
 }
 
+// Team Applications Table Section
+.team-applications-section {
+  margin-top: 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.section-header {
+  padding: 25px 30px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8f9fa;
+
+  h2 {
+    color: #2c3e50;
+    margin: 0 0 8px 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+
+  p {
+    color: #7f8c8d;
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.applications-table-container {
+  overflow-x: auto;
+}
+
+.applications-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+
+  th {
+    background: #f8f9fa;
+    color: #2c3e50;
+    font-weight: 600;
+    text-align: left;
+    padding: 15px 20px;
+    border-bottom: 2px solid #e0e0e0;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+
+  tr:hover {
+    background: #f8f9fa;
+  }
+
+  .app-name {
+    width: 20%;
+    font-weight: 600;
+    color: #2c3e50;
+
+    .app-title {
+      font-size: 1.1rem;
+    }
+  }
+
+  .developers-list {
+    width: 45%;
+
+    .developer-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .developer-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      border-left: 3px solid #3498db;
+
+      &.shared-resource {
+        border-left-color: #e67e22;
+        background: #fef9e7;
+      }
+
+      .developer-name {
+        flex: 1;
+        font-weight: 500;
+        color: #2c3e50;
+
+        &.clickable {
+          cursor: pointer;
+          text-decoration: none;
+          transition: all 0.2s ease;
+          border-radius: 3px;
+          padding: 2px 4px;
+          margin: -2px -4px;
+
+          &:hover {
+            color: #3498db;
+            background: rgba(52, 152, 219, 0.1);
+            text-decoration: underline;
+          }
+
+          &:active {
+            transform: scale(0.98);
+          }
+        }
+      }
+
+      .skill-level {
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        min-width: 40px;
+        text-align: center;
+
+        &.expert {
+          background: #27ae60;
+          color: white;
+        }
+
+        &.advanced {
+          background: #3498db;
+          color: white;
+        }
+
+        &.intermediate {
+          background: #f39c12;
+          color: white;
+        }
+
+        &.beginner {
+          background: #e74c3c;
+          color: white;
+        }
+      }
+
+      .resource-type {
+        background: #e67e22;
+        color: white;
+        font-size: 0.7rem;
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .total-count {
+    width: 15%;
+    text-align: center;
+
+    .count-badge {
+      background: #3498db;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-block;
+    }
+  }
+
+  .skill-distribution {
+    width: 20%;
+
+    .skill-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      height: 80px;
+      justify-content: center;
+    }
+
+    .skill-bar {
+      height: 16px;
+      border-radius: 8px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      transition: all 0.3s ease;
+
+      &.expert {
+        background: #27ae60;
+      }
+
+      &.advanced {
+        background: #3498db;
+      }
+
+      &.intermediate {
+        background: #f39c12;
+      }
+
+      &.beginner {
+        background: #e74c3c;
+      }
+
+      .skill-label {
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        padding: 0 4px;
+      }
+
+      &:hover {
+        transform: scaleY(1.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}
+
+.no-applications-state {
+  text-align: center;
+  padding: 60px 20px;
+
+  .no-applications-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+  }
+
+  h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+  }
+
+  p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+  }
+}
+
 // Responsive Design
 @media (max-width: 768px) {
   .support-availability-container {
@@ -393,6 +659,12 @@
         min-width: 14px;
         height: 14px;
       }
+
+      .app-count {
+        font-size: 0.5rem;
+        min-width: 10px;
+        height: 10px;
+      }
     }
   }
 
@@ -416,4 +688,160 @@
     padding: 8px 3px;
     font-size: 0.7rem;
   }
-} 
+}
+
+// Responsive Design for Table
+@media (max-width: 1024px) {
+  .applications-table {
+    font-size: 0.9rem;
+
+    th, td {
+      padding: 12px 15px;
+    }
+
+    .app-name {
+      width: 25%;
+    }
+
+    .developers-list {
+      width: 40%;
+    }
+
+    .total-count {
+      width: 15%;
+    }
+
+    .skill-distribution {
+      width: 20%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .team-applications-section {
+    margin-top: 30px;
+  }
+
+  .section-header {
+    padding: 20px;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .applications-table {
+    font-size: 0.85rem;
+
+    th, td {
+      padding: 10px 12px;
+    }
+
+    .app-name {
+      width: 30%;
+
+      .app-title {
+        font-size: 1rem;
+      }
+    }
+
+    .developers-list {
+      width: 35%;
+
+      .developer-item {
+        padding: 6px 8px;
+        gap: 6px;
+
+        .developer-name {
+          font-size: 0.85rem;
+        }
+
+        .skill-level {
+          font-size: 0.75rem;
+          min-width: 35px;
+        }
+
+        .resource-type {
+          font-size: 0.65rem;
+        }
+      }
+    }
+
+    .total-count {
+      width: 15%;
+
+      .count-badge {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+      }
+    }
+
+    .skill-distribution {
+      width: 20%;
+
+      .skill-bars {
+        height: 60px;
+      }
+
+      .skill-bar {
+        height: 12px;
+
+        .skill-label {
+          font-size: 0.65rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .applications-table {
+    font-size: 0.8rem;
+
+    th, td {
+      padding: 8px 10px;
+    }
+
+    .app-name {
+      width: 35%;
+
+      .app-title {
+        font-size: 0.9rem;
+      }
+    }
+
+    .developers-list {
+      width: 30%;
+
+      .developer-item {
+        padding: 4px 6px;
+        gap: 4px;
+
+        .developer-name {
+          font-size: 0.8rem;
+        }
+
+        .skill-level {
+          font-size: 0.7rem;
+          min-width: 30px;
+        }
+      }
+    }
+
+    .skill-distribution {
+      width: 20%;
+
+      .skill-bars {
+        height: 50px;
+      }
+
+      .skill-bar {
+        height: 10px;
+
+        .skill-label {
+          font-size: 0.6rem;
+        }
+      }
+    }
+  }
+}
