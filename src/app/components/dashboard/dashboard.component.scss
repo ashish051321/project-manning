@@ -137,19 +137,19 @@
     position: relative;
     overflow: hidden;
 
-    &::before {
-      content: "🔧 DATA MANAGEMENT";
-      position: absolute;
-      top: -12px;
-      left: 20px;
-      background: #f39c12;
-      color: white;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
+    // &::before {
+    //   content: "🔧 DATA MANAGEMENT";
+    //   position: absolute;
+    //   top: -12px;
+    //   left: 20px;
+    //   background: #f39c12;
+    //   color: white;
+    //   padding: 4px 12px;
+    //   border-radius: 20px;
+    //   font-size: 0.75rem;
+    //   font-weight: 600;
+    //   letter-spacing: 0.5px;
+    // }
 
     h3 {
       color: #d68910;
