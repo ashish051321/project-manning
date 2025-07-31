@@ -183,7 +183,7 @@ export class DeveloperFormComponent implements OnInit, OnDestroy {
             date: [vacation.date || ''],
             startDate: [vacation.startDate || ''],
             endDate: [vacation.endDate || ''],
-            description: [vacation.description, Validators.required]
+            description: [vacation.description]
           }));
         });
         console.log('Vacation days loaded successfully:', vacationDays.length, 'days');
@@ -319,7 +319,7 @@ export class DeveloperFormComponent implements OnInit, OnDestroy {
           date: [''],
           startDate: [''],
           endDate: [''],
-          description: ['', Validators.required]
+          description: ['']
         }));
         console.log('Vacation day added successfully');
       } else {
