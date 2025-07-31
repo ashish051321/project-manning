@@ -22,6 +22,10 @@ export class SupportAvailabilityComponent implements OnInit, OnDestroy {
   currentMonth: Date = new Date();
   loading = true;
   
+  // Popup Modal State
+  showPopup = false;
+  selectedDay: any = null;
+  
   // Calendar
   calendarDays: Array<{
     date: Date;
@@ -273,9 +277,41 @@ export class SupportAvailabilityComponent implements OnInit, OnDestroy {
   // Date Selection
   onDateClick(day: any): void {
     if (day.isAtRisk && day.unavailableDevelopers.length > 0) {
-      // Show developers modal or navigate to first developer
-      this.navigateToDeveloper(day.unavailableDevelopers[0].id);
+      this.selectedDay = day;
+      this.showPopup = true;
     }
+  }
+
+  closePopup(): void {
+    this.showPopup = false;
+    this.selectedDay = null;
+  }
+
+  getPopupTitle(): string {
+    if (!this.selectedDay) return '';
+    const date = this.selectedDay.date;
+    return `Support Risk - ${date.toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    })}`;
+  }
+
+  getAffectedAppsText(): string {
+    if (!this.selectedDay || !this.selectedDay.affectedApps) return '';
+    return this.selectedDay.affectedApps.join(', ');
+  }
+
+  getPopupUnavailableDevelopersText(): string {
+    if (!this.selectedDay || !this.selectedDay.unavailableDevelopers) return '';
+    return this.selectedDay.unavailableDevelopers.map((dev: Developer) => dev.name).join(', ');
+  }
+
+  getDeveloperDetails(developer: Developer): string {
+    const teamName = this.getTeamName(developer.teamId || '');
+    const resourceType = developer.isSharedResource ? 'Shared Resource' : 'Primary Member';
+    return `${developer.name} (${teamName} - ${resourceType})`;
   }
 
   navigateToDeveloper(developerId: string): void {
