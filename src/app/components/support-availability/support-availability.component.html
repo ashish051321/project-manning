@@ -201,4 +201,81 @@
       <p>This team doesn't have any developers with application skills assigned</p>
     </div>
   </div>
+
+  <!-- Unassigned Team Members Table -->
+  <div class="unassigned-members-section" *ngIf="selectedTeamId && !loading">
+    <div class="section-header">
+      <h2>Unassigned Team Members</h2>
+      <p>Team members not currently assigned to any team applications</p>
+    </div>
+
+    <div class="unassigned-table-container" *ngIf="hasUnassignedTeamMembers()">
+      <table class="unassigned-table">
+        <thead>
+          <tr>
+            <th>Team Member</th>
+            <th>Resource Type</th>
+            <th>Tech Skills</th>
+            <th>Other App Skills</th>
+            <th>Highest Tech Level</th>
+            <th>Highest App Level</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let developer of getUnassignedTeamMembers()">
+            <td class="developer-name-cell">
+              <span class="developer-name clickable" (click)="navigateToDeveloper(developer.id)">
+                {{ developer.name }}
+              </span>
+            </td>
+            <td class="resource-type-cell">
+              <span class="resource-badge" [class]="developer.isSharedResource ? 'shared' : 'primary'">
+                {{ developer.isSharedResource ? 'Shared Resource' : 'Primary Member' }}
+              </span>
+            </td>
+            <td class="tech-skills-cell">
+              <div class="skills-list" *ngIf="getDeveloperTechSkills(developer).length > 0">
+                <span 
+                  class="skill-tag" 
+                  *ngFor="let skill of getDeveloperTechSkills(developer)"
+                  [title]="skill + ': ' + developer.techSkills[skill] + '/10'">
+                  {{ skill }} ({{ developer.techSkills[skill] }}/10)
+                </span>
+              </div>
+              <span class="no-skills" *ngIf="getDeveloperTechSkills(developer).length === 0">No tech skills</span>
+            </td>
+            <td class="app-skills-cell">
+              <div class="skills-list" *ngIf="getDeveloperAppSkills(developer).length > 0">
+                <span 
+                  class="skill-tag other-app" 
+                  *ngFor="let app of getDeveloperAppSkills(developer)"
+                  [title]="app + ': ' + developer.appSkills[app] + '/10'">
+                  {{ app }} ({{ developer.appSkills[app] }}/10)
+                </span>
+              </div>
+              <span class="no-skills" *ngIf="getDeveloperAppSkills(developer).length === 0">No app skills</span>
+            </td>
+            <td class="highest-tech-cell">
+              <span class="level-badge" [class]="getSkillLevelClass(getHighestTechSkillLevel(developer))" *ngIf="getHighestTechSkillLevel(developer) > 0">
+                {{ getHighestTechSkillLevel(developer) }}/10
+              </span>
+              <span class="no-level" *ngIf="getHighestTechSkillLevel(developer) === 0">-</span>
+            </td>
+            <td class="highest-app-cell">
+              <span class="level-badge" [class]="getSkillLevelClass(getHighestAppSkillLevel(developer))" *ngIf="getHighestAppSkillLevel(developer) > 0">
+                {{ getHighestAppSkillLevel(developer) }}/10
+              </span>
+              <span class="no-level" *ngIf="getHighestAppSkillLevel(developer) === 0">-</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="no-unassigned-state" *ngIf="!hasUnassignedTeamMembers()">
+      <div class="no-unassigned-icon">✅</div>
+      <h3>All Team Members Assigned</h3>
+      <p>All team members are currently assigned to team applications</p>
+    </div>
+  </div>
 </div> 

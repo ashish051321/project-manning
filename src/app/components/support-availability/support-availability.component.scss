@@ -611,6 +611,189 @@
   }
 }
 
+// Unassigned Team Members Table Section
+.unassigned-members-section {
+  margin-top: 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.unassigned-table-container {
+  overflow-x: auto;
+}
+
+.unassigned-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+
+  th {
+    background: #f8f9fa;
+    color: #2c3e50;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 2px solid #e0e0e0;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+
+  tr:hover {
+    background: #f8f9fa;
+  }
+
+  .developer-name-cell {
+    width: 20%;
+
+    .developer-name.clickable {
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border-radius: 3px;
+      padding: 2px 4px;
+      margin: -2px -4px;
+      font-weight: 500;
+      color: #2c3e50;
+
+      &:hover {
+        color: #3498db;
+        background: rgba(52, 152, 219, 0.1);
+        text-decoration: underline;
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+  }
+
+  .resource-type-cell {
+    width: 15%;
+
+    .resource-badge {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-block;
+
+      &.primary {
+        background: #3498db;
+        color: white;
+      }
+
+      &.shared {
+        background: #e67e22;
+        color: white;
+      }
+    }
+  }
+
+  .tech-skills-cell,
+  .app-skills-cell {
+    width: 25%;
+
+    .skills-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .skill-tag {
+      background: #ecf0f1;
+      color: #2c3e50;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      display: inline-block;
+      margin-right: 4px;
+      margin-bottom: 2px;
+
+      &.other-app {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+      }
+    }
+
+    .no-skills {
+      color: #95a5a6;
+      font-style: italic;
+      font-size: 0.8rem;
+    }
+  }
+
+  .highest-tech-cell,
+  .highest-app-cell {
+    width: 7.5%;
+    text-align: center;
+
+    .level-badge {
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-block;
+
+      &.expert {
+        background: #27ae60;
+        color: white;
+      }
+
+      &.advanced {
+        background: #3498db;
+        color: white;
+      }
+
+      &.intermediate {
+        background: #f39c12;
+        color: white;
+      }
+
+      &.beginner {
+        background: #e74c3c;
+        color: white;
+      }
+    }
+
+    .no-level {
+      color: #95a5a6;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+.no-unassigned-state {
+  text-align: center;
+  padding: 60px 20px;
+
+  .no-unassigned-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.7;
+  }
+
+  h3 {
+    color: #27ae60;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+  }
+
+  p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+  }
+}
+
 // Responsive Design
 @media (max-width: 768px) {
   .support-availability-container {
@@ -841,6 +1024,133 @@
         .skill-label {
           font-size: 0.6rem;
         }
+      }
+    }
+  }
+}
+
+// Responsive Design for Unassigned Table
+@media (max-width: 1024px) {
+  .unassigned-table {
+    font-size: 0.85rem;
+
+    th, td {
+      padding: 10px 12px;
+    }
+
+    .developer-name-cell {
+      width: 25%;
+    }
+
+    .resource-type-cell {
+      width: 20%;
+    }
+
+    .tech-skills-cell,
+    .app-skills-cell {
+      width: 20%;
+    }
+
+    .highest-tech-cell,
+    .highest-app-cell {
+      width: 7.5%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .unassigned-members-section {
+    margin-top: 30px;
+  }
+
+  .unassigned-table {
+    font-size: 0.8rem;
+
+    th, td {
+      padding: 8px 10px;
+    }
+
+    .developer-name-cell {
+      width: 30%;
+
+      .developer-name.clickable {
+        font-size: 0.85rem;
+      }
+    }
+
+    .resource-type-cell {
+      width: 25%;
+
+      .resource-badge {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+      }
+    }
+
+    .tech-skills-cell,
+    .app-skills-cell {
+      width: 15%;
+
+      .skill-tag {
+        font-size: 0.7rem;
+        padding: 1px 4px;
+      }
+    }
+
+    .highest-tech-cell,
+    .highest-app-cell {
+      width: 7.5%;
+
+      .level-badge {
+        font-size: 0.7rem;
+        padding: 2px 4px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .unassigned-table {
+    font-size: 0.75rem;
+
+    th, td {
+      padding: 6px 8px;
+    }
+
+    .developer-name-cell {
+      width: 35%;
+
+      .developer-name.clickable {
+        font-size: 0.8rem;
+      }
+    }
+
+    .resource-type-cell {
+      width: 30%;
+
+      .resource-badge {
+        font-size: 0.65rem;
+        padding: 2px 4px;
+      }
+    }
+
+    .tech-skills-cell,
+    .app-skills-cell {
+      width: 10%;
+
+      .skill-tag {
+        font-size: 0.65rem;
+        padding: 1px 3px;
+      }
+    }
+
+    .highest-tech-cell,
+    .highest-app-cell {
+      width: 7.5%;
+
+      .level-badge {
+        font-size: 0.65rem;
+        padding: 1px 3px;
       }
     }
   }

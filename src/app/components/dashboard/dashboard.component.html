@@ -4,60 +4,6 @@
     <p class="subtitle">Manage your organization's teams, developers, and resources</p>
   </div>
 
-  <!-- Data Storage Info -->
-  <div class="storage-info" *ngIf="!loading">
-    <div class="storage-card">
-      <div class="storage-icon">💾</div>
-      <div class="storage-details">
-        <h3>Local Storage</h3>
-        <p>Data is stored in your browser's localStorage</p>
-        <div class="storage-stats">
-          <span class="stat">
-            <strong>Last Updated:</strong> {{ lastUpdated }}
-          </span>
-          <span class="stat">
-            <strong>Data Size:</strong> {{ dataSize }}
-          </span>
-          <span class="stat">
-            <strong>Status:</strong> 
-            <span class="status-badge" [class.active]="hasStoredData">
-              {{ hasStoredData ? 'Active' : 'Empty' }}
-            </span>
-          </span>
-        </div>
-      </div>
-      <button class="btn-secondary" (click)="toggleDataManagement()">
-        {{ showDataManagement ? 'Hide' : 'Manage' }} Data
-      </button>
-    </div>
-  </div>
-
-  <!-- Data Management Panel -->
-  <div class="data-management" *ngIf="showDataManagement && !loading">
-    <div class="management-card">
-      <h3>Data Management</h3>
-      <div class="management-actions">
-        <button class="btn-export" (click)="exportData()">
-          📤 Export Data
-        </button>
-        <label class="btn-import">
-          📥 Import Data
-          <input type="file" accept=".json" (change)="importData($event)" style="display: none;">
-        </label>
-        <button class="btn-reset" (click)="resetToInitialData()">
-          🔄 Reset to Initial
-        </button>
-        <button class="btn-clear" (click)="clearAllData()">
-          🗑️ Clear All Data
-        </button>
-      </div>
-      <p class="management-note">
-        💡 <strong>Tip:</strong> Export your data regularly to keep a backup. 
-        All changes are automatically saved to localStorage.
-      </p>
-    </div>
-  </div>
-
   <div class="stats-grid" *ngIf="!loading">
     <div class="stat-card">
       <div class="stat-icon">👥</div>
@@ -137,6 +83,60 @@
       <div class="nav-icon">🏖️</div>
       <h3>Vacations</h3>
       <p>Track team vacation schedules</p>
+    </div>
+  </div>
+
+  <!-- Data Storage Info -->
+  <div class="storage-info" *ngIf="!loading">
+    <div class="storage-card">
+      <div class="storage-icon">💾</div>
+      <div class="storage-details">
+        <h3>Local Storage</h3>
+        <p>This entire application works by storing data in your browser's localStorage !</p>
+        <div class="storage-stats">
+          <span class="stat">
+            <strong>Last Updated:</strong> {{ lastUpdated }}
+          </span>
+          <span class="stat">
+            <strong>Data Size:</strong> {{ dataSize }}
+          </span>
+          <span class="stat">
+            <strong>Status:</strong> 
+            <span class="status-badge" [class.active]="hasStoredData">
+              {{ hasStoredData ? 'Active' : 'Empty' }}
+            </span>
+          </span>
+        </div>
+      </div>
+      <button class="btn-secondary" (click)="toggleDataManagement()">
+        {{ showDataManagement ? 'Hide' : 'Manage' }} Data
+      </button>
+    </div>
+  </div>
+
+  <!-- Data Management Panel -->
+  <div class="data-management" *ngIf="showDataManagement && !loading">
+    <div class="management-card">
+      <h3>Data Management</h3>
+      <div class="management-actions">
+        <button class="btn-export" (click)="exportData()">
+          📤 Export Data
+        </button>
+        <label class="btn-import">
+          📥 Import Data
+          <input type="file" accept=".json" (change)="importData($event)" style="display: none;">
+        </label>
+        <button class="btn-reset" (click)="resetToInitialData()">
+          🔄 Reset to a sample data set
+        </button>
+        <button class="btn-clear" (click)="clearAllData()">
+          🗑️ Clear All Data
+        </button>
+      </div>
+      <p class="management-note">
+        💡 <strong>Tip:</strong> Export your data regularly to keep a backup. 
+        All changes are automatically saved to localStorage.
+      </p>
     </div>
   </div>
 

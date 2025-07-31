@@ -2,21 +2,25 @@
   "organization": {
     "name": "Project Manning",
     "version": "1.0",
-    "lastUpdated": "2024-01-15"
+    "lastUpdated": "2025-07-31"
   },
   "managers": [
     {
       "id": "mgr_001",
       "name": "Vivek Hanwatkar",
       "role": "Team Manager",
-      "teams": ["team_001"],
+      "teams": [
+        "team_001"
+      ],
       "description": "Manager of Alpha Squad"
     },
     {
       "id": "mgr_002",
       "name": "Ashish Mishra",
       "role": "Team Manager",
-      "teams": ["team_002"],
+      "teams": [
+        "team_002"
+      ],
       "description": "Manager of Beta Warriors"
     }
   ],
@@ -25,7 +29,13 @@
       "id": "team_001",
       "name": "Alpha Squad",
       "managerId": "mgr_001",
-      "developers": ["dev_001", "dev_002", "dev_003", "dev_004", "dev_005"],
+      "developers": [
+        "dev_001",
+        "dev_002",
+        "dev_003",
+        "dev_004",
+        "dev_005"
+      ],
       "sharedResources": [],
       "description": "Database-focused team"
     },
@@ -33,7 +43,18 @@
       "id": "team_002",
       "name": "Beta Warriors",
       "managerId": "mgr_002",
-      "developers": ["dev_006", "dev_007", "dev_008", "dev_009", "dev_010", "dev_011", "dev_012", "dev_013", "dev_014", "dev_015"],
+      "developers": [
+        "dev_006",
+        "dev_007",
+        "dev_008",
+        "dev_009",
+        "dev_010",
+        "dev_011",
+        "dev_012",
+        "dev_013",
+        "dev_014",
+        "dev_015"
+      ],
       "sharedResources": [],
       "description": "Full-stack development team"
     }
@@ -46,15 +67,28 @@
       "isSharedResource": false,
       "assignedTeams": [],
       "techSkills": {
-        "Database": 8
+        "Java": 0,
+        "Angular": 0,
+        "Database": 8,
+        "QA Automation": 0
       },
       "appSkills": {
         "Customer Portal": 8,
-        "Payment Gateway": 6
+        "Payment Gateway": 6,
+        "Inventory Management": 0,
+        "Reporting Dashboard": 0
       },
       "availability": {
         "status": "active",
-        "vacationDays": []
+        "vacationDays": [
+          {
+            "type": "single",
+            "date": "2025-08-19",
+            "startDate": "",
+            "endDate": "",
+            "description": ""
+          }
+        ]
       }
     },
     {
@@ -64,9 +98,17 @@
       "isSharedResource": false,
       "assignedTeams": [],
       "techSkills": {
-        "Database": 7
+        "Java": 0,
+        "Angular": 0,
+        "Database": 7,
+        "QA Automation": 0
       },
-      "appSkills": {},
+      "appSkills": {
+        "Customer Portal": 0,
+        "Payment Gateway": 0,
+        "Inventory Management": 0,
+        "Reporting Dashboard": 8
+      },
       "availability": {
         "status": "active",
         "vacationDays": []
@@ -94,9 +136,17 @@
       "isSharedResource": false,
       "assignedTeams": [],
       "techSkills": {
-        "Database": 7
+        "Java": 0,
+        "Angular": 0,
+        "Database": 7,
+        "QA Automation": 0
       },
-      "appSkills": {},
+      "appSkills": {
+        "Customer Portal": 0,
+        "Payment Gateway": 0,
+        "Inventory Management": 0,
+        "Reporting Dashboard": 5
+      },
       "availability": {
         "status": "active",
         "vacationDays": []
@@ -158,9 +208,17 @@
       "isSharedResource": false,
       "assignedTeams": [],
       "techSkills": {
-        "Java": 6
+        "Java": 6,
+        "Angular": 0,
+        "Database": 0,
+        "QA Automation": 0
       },
-      "appSkills": {},
+      "appSkills": {
+        "Customer Portal": 5,
+        "Payment Gateway": 0,
+        "Inventory Management": 8,
+        "Reporting Dashboard": 0
+      },
       "availability": {
         "status": "active",
         "vacationDays": []
@@ -174,15 +232,27 @@
       "assignedTeams": [],
       "techSkills": {
         "Java": 8,
-        "Angular": 6
+        "Angular": 6,
+        "Database": 0,
+        "QA Automation": 0
       },
       "appSkills": {
+        "Customer Portal": 0,
         "Payment Gateway": 8,
-        "Inventory Management": 7
+        "Inventory Management": 7,
+        "Reporting Dashboard": 0
       },
       "availability": {
         "status": "active",
-        "vacationDays": []
+        "vacationDays": [
+          {
+            "type": "single",
+            "date": "2025-08-14",
+            "startDate": "",
+            "endDate": "",
+            "description": ""
+          }
+        ]
       }
     },
     {
@@ -222,15 +292,35 @@
       "isSharedResource": false,
       "assignedTeams": [],
       "techSkills": {
-        "Angular": 8
+        "Java": 0,
+        "Angular": 8,
+        "Database": 0,
+        "QA Automation": 0
       },
       "appSkills": {
         "Customer Portal": 7,
+        "Payment Gateway": 0,
+        "Inventory Management": 0,
         "Reporting Dashboard": 8
       },
       "availability": {
         "status": "active",
-        "vacationDays": []
+        "vacationDays": [
+          {
+            "type": "single",
+            "date": "2025-08-05",
+            "startDate": "",
+            "endDate": "",
+            "description": ""
+          },
+          {
+            "type": "range",
+            "date": "",
+            "startDate": "2025-08-14",
+            "endDate": "2025-08-20",
+            "description": ""
+          }
+        ]
       }
     },
     {

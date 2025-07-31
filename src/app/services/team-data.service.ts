@@ -21,13 +21,62 @@ export class TeamDataService {
     // First try to load from localStorage
     const storedData = this.loadFromLocalStorage();
     
-    if (storedData) {
-      // Use stored data if available
+    if (storedData && this.isValidTeamData(storedData)) {
+      // Use stored data if available and valid
+      console.log('Using data from localStorage');
       this.teamDataSubject.next(storedData);
     } else {
-      // Load from JSON file as seed data if localStorage is empty
-      this.loadFromJsonFile();
+      // Create empty structure instead of loading sample data
+      console.log('Creating empty data structure - no sample data loaded');
+      this.createEmptyDataStructure();
     }
+  }
+
+  private createEmptyDataStructure(): void {
+    const emptyData: TeamData = {
+      organization: {
+        name: 'ProjectManning Organization',
+        version: '1.0.0',
+        lastUpdated: new Date().toISOString().split('T')[0]
+      },
+      managers: [],
+      teams: [],
+      developers: [],
+      skillDefinitions: {
+        techSkills: {},
+        appSkills: {}
+      },
+      metadata: {
+        skillScales: {
+          techSkillsScale: '0-10',
+          appSkillsScale: '0-10'
+        },
+        defaultTechSkillRating: 7,
+        defaultAppSkillRating: 8,
+        sharedResourceIndicator: 'isSharedResource',
+        vacationTracking: true
+      }
+    };
+    
+    // Save empty structure to localStorage
+    this.saveToLocalStorage(emptyData);
+    
+    // Update the subject with empty data
+    this.teamDataSubject.next(emptyData);
+    
+    console.log('Empty data structure created and saved to localStorage');
+  }
+
+  private isValidTeamData(data: any): boolean {
+    // Basic validation to ensure the data structure is correct
+    return data && 
+           typeof data === 'object' &&
+           data.organization &&
+           Array.isArray(data.managers) &&
+           Array.isArray(data.teams) &&
+           Array.isArray(data.developers) &&
+           data.skillDefinitions &&
+           data.metadata;
   }
 
   private loadFromJsonFile(): void {
@@ -93,12 +142,31 @@ export class TeamDataService {
 
   private saveToLocalStorage(data: TeamData): void {
     try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+      // Test if localStorage is available
+      if (!this.isLocalStorageAvailable()) {
+        console.warn('localStorage is not available');
+        return;
+      }
+      
+      const jsonData = JSON.stringify(data);
+      localStorage.setItem(this.STORAGE_KEY, jsonData);
       console.log('Data saved to localStorage successfully');
+      console.log('Saved data size:', new Blob([jsonData]).size, 'bytes');
     } catch (error) {
       console.error('Error saving to localStorage:', error);
       // If localStorage is full or disabled, try to clear some space
       this.handleLocalStorageError();
+    }
+  }
+
+  private isLocalStorageAvailable(): boolean {
+    try {
+      const test = '__localStorage_test__';
+      localStorage.setItem(test, test);
+      localStorage.removeItem(test);
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 
@@ -121,27 +189,48 @@ export class TeamDataService {
       if (stored) {
         const parsedData = JSON.parse(stored);
         console.log('Data loaded from localStorage successfully');
+        console.log('localStorage data size:', new Blob([stored]).size, 'bytes');
         return parsedData;
+      } else {
+        console.log('No data found in localStorage');
+        return null;
       }
-      return null;
     } catch (error) {
       console.error('Error loading from localStorage:', error);
+      console.log('localStorage content:', localStorage.getItem(this.STORAGE_KEY));
       return null;
     }
   }
 
   // Method to reset data to initial JSON state
   resetToInitialData(): void {
+    console.log('Resetting to initial data from JSON file');
     this.loadFromJsonFile();
+  }
+
+  // Method to force reload from localStorage (for debugging)
+  forceReloadFromLocalStorage(): void {
+    console.log('Force reloading from localStorage');
+    const storedData = this.loadFromLocalStorage();
+    if (storedData && this.isValidTeamData(storedData)) {
+      this.teamDataSubject.next(storedData);
+      console.log('Successfully reloaded from localStorage');
+    } else {
+      console.log('No valid data in localStorage, loading from JSON file');
+      this.loadFromJsonFile();
+    }
   }
 
   // Method to clear all data
   clearAllData(): void {
     try {
+      // Remove from localStorage
       localStorage.removeItem(this.STORAGE_KEY);
-      const defaultData = this.getDefaultTeamData();
-      this.teamDataSubject.next(defaultData);
-      console.log('All data cleared successfully');
+      
+      // Create and save empty data structure
+      this.createEmptyDataStructure();
+      
+      console.log('All data cleared - localStorage now contains empty structure');
     } catch (error) {
       console.error('Error clearing data:', error);
     }

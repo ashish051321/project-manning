@@ -419,4 +419,53 @@ export class SupportAvailabilityComponent implements OnInit, OnDestroy {
   hasTeamApplications(): boolean {
     return this.getTeamApplicationsWithDevelopers().length > 0;
   }
+
+  // Methods for unassigned team members
+  getUnassignedTeamMembers(): Developer[] {
+    if (!this.selectedTeamId) return [];
+    
+    const teamDevelopers = this.getTeamDevelopers();
+    const teamApps = this.getTeamApplications();
+    
+    return teamDevelopers.filter(developer => {
+      // Check if developer has any application skills
+      const hasAnyAppSkills = Object.keys(developer.appSkills).some(app => 
+        developer.appSkills[app] && developer.appSkills[app]! > 0
+      );
+      
+      // Check if any of their app skills are relevant to team applications
+      const hasTeamAppSkills = teamApps.some(app => 
+        developer.appSkills[app] && developer.appSkills[app]! > 0
+      );
+      
+      // Return true if developer has no app skills at all, or no skills relevant to team apps
+      return !hasAnyAppSkills || !hasTeamAppSkills;
+    });
+  }
+
+  hasUnassignedTeamMembers(): boolean {
+    return this.getUnassignedTeamMembers().length > 0;
+  }
+
+  getDeveloperTechSkills(developer: Developer): string[] {
+    return Object.keys(developer.techSkills).filter(skill => 
+      developer.techSkills[skill] && developer.techSkills[skill]! > 0
+    );
+  }
+
+  getDeveloperAppSkills(developer: Developer): string[] {
+    return Object.keys(developer.appSkills).filter(app => 
+      developer.appSkills[app] && developer.appSkills[app]! > 0
+    );
+  }
+
+  getHighestTechSkillLevel(developer: Developer): number {
+    const techSkillValues = Object.values(developer.techSkills).filter(value => value && value > 0) as number[];
+    return techSkillValues.length > 0 ? Math.max(...techSkillValues) : 0;
+  }
+
+  getHighestAppSkillLevel(developer: Developer): number {
+    const appSkillValues = Object.values(developer.appSkills).filter(value => value && value > 0) as number[];
+    return appSkillValues.length > 0 ? Math.max(...appSkillValues) : 0;
+  }
 } 
