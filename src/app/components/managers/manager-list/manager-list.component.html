@@ -24,7 +24,7 @@
 
       <div class="table-body">
         <div class="table-row" *ngFor="let manager of managers">
-          <div class="table-cell">
+          <div class="table-cell manager-cell" data-label="Manager">
             <div class="manager-info">
               <div class="manager-avatar">👨‍💼</div>
               <div class="manager-details">
@@ -34,13 +34,13 @@
             </div>
           </div>
           
-          <div class="table-cell">
+          <div class="table-cell role-cell" data-label="Role">
             <div class="role-info">
               <span class="role-badge">{{ manager.role }}</span>
             </div>
           </div>
           
-          <div class="table-cell">
+          <div class="table-cell teams-cell" data-label="Assigned Teams">
             <div class="teams-info">
               <div class="teams-list">
                 {{ getAssignedTeamNames(manager.id) }}
@@ -51,7 +51,7 @@
             </div>
           </div>
           
-          <div class="table-cell">
+          <div class="table-cell count-cell" data-label="Team Count">
             <div class="team-count">
               <span class="count-badge" [class.has-teams]="getTeamCount(manager.id) > 0">
                 {{ getTeamCount(manager.id) }}
@@ -60,11 +60,11 @@
             </div>
           </div>
           
-          <div class="table-cell">
+          <div class="table-cell description-cell" data-label="Description">
             <p class="description">{{ manager.description }}</p>
           </div>
           
-          <div class="table-cell">
+          <div class="table-cell actions-cell" data-label="Actions">
             <div class="action-buttons">
               <button class="btn-edit" (click)="editManager(manager.id)">
                 ✏️ Edit

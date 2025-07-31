@@ -91,7 +91,7 @@
             {{ day.unavailableDevelopers.length }}
           </div>
           <div class="app-count" *ngIf="selectedApplication === 'all' && day.affectedApps.length > 1">
-            {{ day.affectedApps.length }} apps
+            {{ day.affectedApps.length }}
           </div>
         </div>
       </div>
@@ -141,41 +141,54 @@
         </div>
 
         <div class="risk-details">
-          <div class="detail-section">
-            <h5>🚫 Affected Applications</h5>
-            <div class="affected-apps">
-              <span class="app-tag" *ngFor="let app of selectedDay?.affectedApps">
-                {{ app }}
-              </span>
+          <!-- Application-specific risk sections -->
+          <div class="application-risk-section" *ngFor="let appRisk of getRiskDataByApplication()">
+            <div class="app-header" [class.at-risk]="appRisk.isAtRisk">
+              <h5>
+                <span class="app-icon">🚫</span>
+                {{ appRisk.application }}
+                <span class="risk-status" *ngIf="appRisk.isAtRisk">- AT RISK</span>
+                <span class="safe-status" *ngIf="!appRisk.isAtRisk">- SAFE</span>
+              </h5>
+              <div class="app-stats">
+                <span class="stat-badge">
+                  {{ appRisk.unavailableDevelopers.length }}/{{ appRisk.totalDevelopers }} unavailable
+                </span>
+              </div>
             </div>
-          </div>
 
-          <div class="detail-section">
-            <h5>👥 Team Members on Leave</h5>
-            <div class="developers-list">
-              <div class="developer-item" *ngFor="let developer of selectedDay?.unavailableDevelopers">
-                <div class="developer-info">
-                  <span class="developer-name clickable" (click)="navigateToDeveloper(developer.id)">
-                    {{ developer.name }}
-                  </span>
-                  <span class="developer-details">{{ getDeveloperDetails(developer) }}</span>
-                </div>
-                <div class="resource-type" *ngIf="developer.isSharedResource">
-                  <span class="sr-badge">SR</span>
+            <div class="app-developers" *ngIf="appRisk.unavailableDevelopers.length > 0">
+              <h6>👥 Team Members on Leave for this Application:</h6>
+              <div class="developers-list">
+                <div class="developer-item" *ngFor="let developer of appRisk.unavailableDevelopers">
+                  <div class="developer-info">
+                    <span class="developer-name clickable" (click)="navigateToDeveloper(developer.id)">
+                      {{ developer.name }}
+                    </span>
+                    <span class="developer-details">{{ getDeveloperDetails(developer) }}</span>
+                  </div>
+                  <div class="resource-type" *ngIf="developer.isSharedResource">
+                    <span class="sr-badge">SR</span>
+                  </div>
                 </div>
               </div>
             </div>
+
+            <div class="app-status" *ngIf="appRisk.unavailableDevelopers.length === 0">
+              <p class="safe-message">✅ All developers for this application are available</p>
+            </div>
           </div>
 
+          <!-- Overall Impact Summary -->
           <div class="detail-section">
-            <h5>📊 Impact Summary</h5>
+            <h5>📊 Overall Impact Summary</h5>
             <div class="impact-summary">
               <div class="impact-item">
                 <span class="impact-label">Applications at Risk:</span>
                 <span class="impact-value">{{ selectedDay?.affectedApps?.length || 0 }}</span>
               </div>
               <div class="impact-item">
-                <span class="impact-label">Team Members Unavailable:</span>
+                <span class="impact-label">Total Team Members Unavailable:</span>
                 <span class="impact-value">{{ selectedDay?.unavailableDevelopers?.length || 0 }}</span>
               </div>
             </div>
@@ -186,9 +199,6 @@
       <div class="popup-actions">
         <button class="btn-secondary" (click)="closePopup()">
           Close
-        </button>
-        <button class="btn-primary" (click)="navigateToDeveloper(selectedDay?.unavailableDevelopers[0]?.id)" *ngIf="selectedDay?.unavailableDevelopers?.length > 0">
-          View First Developer
         </button>
       </div>
     </div>

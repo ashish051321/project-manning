@@ -430,7 +430,7 @@
   }
 
   .developers-list {
-    width: 45%;
+    width: 90%;
 
     .developer-items {
       display: flex;
@@ -827,26 +827,36 @@
   .calendar-day {
     min-height: 80px;
     padding: 8px;
+    position: relative;
 
     .day-number {
       font-size: 1rem;
+      margin-bottom: 8px;
     }
 
     .risk-indicator {
+      position: static;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      margin-top: 4px;
+
       .risk-icon {
         font-size: 0.7rem;
+        line-height: 1;
       }
 
       .developer-count {
-        font-size: 0.6rem;
-        min-width: 14px;
-        height: 14px;
+        display: none;
       }
 
       .app-count {
         font-size: 0.5rem;
         min-width: 10px;
         height: 10px;
+        line-height: 1;
       }
     }
   }
@@ -864,6 +874,28 @@
 
     .day-number {
       font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+
+    .risk-indicator {
+      gap: 2px;
+      margin-top: 3px;
+
+      .risk-icon {
+        font-size: 0.6rem;
+        line-height: 1;
+      }
+
+      .developer-count {
+        display: none;
+      }
+
+      .app-count {
+        font-size: 0.45rem;
+        min-width: 8px;
+        height: 8px;
+        line-height: 1;
+      }
     }
   }
 
@@ -887,7 +919,7 @@
     }
 
     .developers-list {
-      width: 40%;
+      width: 90%;
     }
 
     .total-count {
@@ -929,7 +961,7 @@
     }
 
     .developers-list {
-      width: 35%;
+      width: 90%;
 
       .developer-item {
         padding: 6px 8px;
@@ -994,7 +1026,7 @@
     }
 
     .developers-list {
-      width: 30%;
+      width: 90%;
 
       .developer-item {
         padding: 4px 6px;
@@ -1275,6 +1307,92 @@
       font-weight: 600;
     }
   }
+
+  // Application-specific risk sections
+  .application-risk-section {
+    margin-bottom: 2rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+
+    &:last-child {
+      margin-bottom: 1.5rem;
+    }
+
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: #f8f9fa;
+      border-bottom: 1px solid #e0e0e0;
+
+      &.at-risk {
+        background: #fff3cd;
+        border-left: 4px solid #e74c3c;
+      }
+
+      h5 {
+        margin: 0;
+        color: #2c3e50;
+        font-size: 1.1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        .app-icon {
+          font-size: 1.2rem;
+        }
+
+        .risk-status {
+          color: #e74c3c;
+          font-weight: 700;
+          font-size: 0.9rem;
+        }
+
+        .safe-status {
+          color: #27ae60;
+          font-weight: 700;
+          font-size: 0.9rem;
+        }
+      }
+
+      .app-stats {
+        .stat-badge {
+          background: #3498db;
+          color: white;
+          padding: 0.4rem 0.8rem;
+          border-radius: 12px;
+          font-size: 0.85rem;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .app-developers {
+      padding: 1rem 1.5rem;
+
+      h6 {
+        margin: 0 0 0.75rem 0;
+        color: #2c3e50;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+    }
+
+    .app-status {
+      padding: 1rem 1.5rem;
+      text-align: center;
+
+      .safe-message {
+        margin: 0;
+        color: #27ae60;
+        font-weight: 500;
+        font-size: 0.95rem;
+      }
+    }
+  }
 }
 
 .affected-apps {
@@ -1467,6 +1585,45 @@
     }
   }
 
+  .application-risk-section {
+    margin-bottom: 1.5rem;
+
+    .app-header {
+      flex-direction: column;
+      gap: 0.75rem;
+      text-align: center;
+
+      h5 {
+        font-size: 1rem;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .app-stats {
+        .stat-badge {
+          font-size: 0.8rem;
+          padding: 0.3rem 0.6rem;
+        }
+      }
+    }
+
+    .app-developers {
+      padding: 0.75rem 1rem;
+
+      h6 {
+        font-size: 0.9rem;
+      }
+    }
+
+    .app-status {
+      padding: 0.75rem 1rem;
+
+      .safe-message {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
   .developers-list {
     .developer-item {
       flex-direction: column;
@@ -1532,6 +1689,50 @@
 
       p {
         font-size: 0.8rem;
+      }
+    }
+  }
+
+  .application-risk-section {
+    margin-bottom: 1rem;
+
+    .app-header {
+      padding: 0.75rem 1rem;
+
+      h5 {
+        font-size: 0.9rem;
+
+        .app-icon {
+          font-size: 1rem;
+        }
+
+        .risk-status,
+        .safe-status {
+          font-size: 0.8rem;
+        }
+      }
+
+      .app-stats {
+        .stat-badge {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+        }
+      }
+    }
+
+    .app-developers {
+      padding: 0.5rem 0.75rem;
+
+      h6 {
+        font-size: 0.85rem;
+      }
+    }
+
+    .app-status {
+      padding: 0.5rem 0.75rem;
+
+      .safe-message {
+        font-size: 0.85rem;
       }
     }
   }

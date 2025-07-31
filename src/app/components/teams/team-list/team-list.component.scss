@@ -350,6 +350,33 @@
 }
 
 // Responsive design
+@media (max-width: 1200px) {
+  .teams-table {
+    .table-header,
+    .table-row {
+      grid-template-columns: 2fr 1fr 2fr 1fr 1fr;
+    }
+
+    .description-cell {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .teams-table {
+    .table-header,
+    .table-row {
+      grid-template-columns: 2fr 1fr 2fr 1fr;
+    }
+
+    .description-cell,
+    .shared-cell {
+      display: none;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .team-list-container {
     padding: 1rem;
@@ -367,42 +394,283 @@
   }
 
   .teams-table {
-    .table-header,
-    .table-row {
-      grid-template-columns: 1fr;
-      gap: 0.5rem;
-    }
-
     .table-header {
       display: none;
     }
 
     .table-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
       border: 1px solid #ecf0f1;
       border-radius: 8px;
       margin-bottom: 1rem;
       padding: 1rem;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .table-cell {
-      justify-content: space-between;
-      padding: 0.5rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0.5rem;
+      border: none;
 
       &:before {
         content: attr(data-label);
         font-weight: 600;
         color: #2c3e50;
-        margin-right: 1rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .team-cell {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      &:before {
+        display: none;
+      }
+    }
+
+    .manager-cell {
+      grid-column: 1 / 2;
+    }
+
+    .members-cell {
+      grid-column: 2 / 3;
+    }
+
+    .shared-cell {
+      grid-column: 1 / 2;
+      display: flex;
+    }
+
+    .description-cell {
+      grid-column: 2 / 3;
+      display: flex;
+    }
+
+    .actions-cell {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      &:before {
+        display: none;
+      }
+    }
+  }
+
+  .team-info {
+    flex: 1;
+    justify-content: space-between;
+
+    .team-avatar {
+      width: 40px;
+      height: 40px;
+      font-size: 1.5rem;
+    }
+
+    .team-details {
+      flex: 1;
+      margin-left: 0.75rem;
+
+      h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .team-id {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  .manager-info {
+    .manager-name {
+      font-size: 0.9rem;
+    }
+
+    .manager-status {
+      font-size: 0.75rem;
+    }
+  }
+
+  .members-info {
+    .member-count {
+      .count-badge {
+        font-size: 0.75rem;
+        padding: 0.15rem 0.4rem;
+      }
+
+      .count-label {
+        font-size: 0.65rem;
+      }
+    }
+
+    .member-breakdown {
+      .primary-count,
+      .shared-count {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  .shared-resources {
+    .shared-count {
+      .shared-badge {
+        font-size: 0.75rem;
+        padding: 0.15rem 0.4rem;
+      }
+
+      .shared-label {
+        font-size: 0.65rem;
+      }
+    }
+
+    .shared-list {
+      font-size: 0.8rem;
+    }
+
+    .no-shared {
+      font-size: 0.75rem;
+    }
+  }
+
+  .description {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .action-buttons {
+    gap: 0.5rem;
+
+    button {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  .team-stats {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+
+    .stats-card {
+      padding: 1rem;
+
+      .stat-icon {
+        font-size: 1.5rem;
+      }
+
+      .stat-content {
+        h3 {
+          font-size: 1.5rem;
+        }
+
+        p {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .teams-table {
+    .table-row {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .table-cell {
+      grid-column: 1 / -1;
+      flex-direction: column;
+      align-items: flex-start;
+
+      &:before {
+        display: block;
+      }
+    }
+
+    .team-cell {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      &:before {
+        display: none;
+      }
+    }
+
+    .actions-cell {
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      &:before {
+        display: none;
+      }
+    }
+  }
+
+  .team-info {
+    .team-avatar {
+      width: 35px;
+      height: 35px;
+      font-size: 1.25rem;
+    }
+
+    .team-details {
+      margin-left: 0.5rem;
+
+      h3 {
+        font-size: 0.9rem;
+      }
+
+      .team-id {
+        font-size: 0.7rem;
       }
     }
   }
 
   .action-buttons {
-    justify-content: center;
-    width: 100%;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    button {
+      padding: 0.3rem 0.6rem;
+      font-size: 0.7rem;
+    }
   }
 
   .team-stats {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+
+    .stats-card {
+      padding: 0.75rem;
+
+      .stat-icon {
+        font-size: 1.25rem;
+      }
+
+      .stat-content {
+        h3 {
+          font-size: 1.25rem;
+        }
+
+        p {
+          font-size: 0.75rem;
+        }
+      }
+    }
   }
 }

@@ -318,6 +318,62 @@ export class SupportAvailabilityComponent implements OnInit, OnDestroy {
     this.router.navigate(['/developers/edit', developerId]);
   }
 
+  // New method to group risk data by application
+  getRiskDataByApplication(): Array<{
+    application: string;
+    isAtRisk: boolean;
+    unavailableDevelopers: Developer[];
+    totalDevelopers: number;
+  }> {
+    if (!this.selectedDay) return [];
+
+    const teamDevelopers = this.getTeamDevelopers();
+    const riskData: Array<{
+      application: string;
+      isAtRisk: boolean;
+      unavailableDevelopers: Developer[];
+      totalDevelopers: number;
+    }> = [];
+
+    if (this.selectedApplication === 'all') {
+      // Group by all affected applications
+      for (const app of this.selectedDay.affectedApps) {
+        const developersWithApp = teamDevelopers.filter(dev => 
+          this.hasApplicationSkill(dev, app)
+        );
+        
+        const unavailableForApp = developersWithApp.filter(dev => 
+          this.isDeveloperOnVacation(dev, this.selectedDay.date)
+        );
+
+        riskData.push({
+          application: app,
+          isAtRisk: unavailableForApp.length === developersWithApp.length && developersWithApp.length > 0,
+          unavailableDevelopers: unavailableForApp,
+          totalDevelopers: developersWithApp.length
+        });
+      }
+    } else {
+      // Single application view
+      const developersWithApp = teamDevelopers.filter(dev => 
+        this.hasApplicationSkill(dev, this.selectedApplication)
+      );
+      
+      const unavailableForApp = developersWithApp.filter(dev => 
+        this.isDeveloperOnVacation(dev, this.selectedDay.date)
+      );
+
+      riskData.push({
+        application: this.selectedApplication,
+        isAtRisk: unavailableForApp.length === developersWithApp.length && developersWithApp.length > 0,
+        unavailableDevelopers: unavailableForApp,
+        totalDevelopers: developersWithApp.length
+      });
+    }
+
+    return riskData;
+  }
+
   // Helper methods
   getMonthName(): string {
     return this.currentMonth.toLocaleDateString('en-US', { 

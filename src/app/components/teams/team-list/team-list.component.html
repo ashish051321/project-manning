@@ -24,7 +24,7 @@
 
       <div class="table-body">
         <div class="table-row" *ngFor="let team of teams">
-          <div class="table-cell">
+          <div class="table-cell team-cell" data-label="Team">
             <div class="team-info">
               <div class="team-avatar">🏢</div>
               <div class="team-details">
@@ -34,7 +34,7 @@
             </div>
           </div>
           
-          <div class="table-cell">
+          <div class="table-cell manager-cell" data-label="Manager">
             <div class="manager-info">
               <span class="manager-name">{{ getManagerName(team.managerId) }}</span>
               <span class="manager-status" [class.assigned]="team.managerId && team.managerId !== ''">
@@ -43,7 +43,7 @@
             </div>
           </div>
           
-          <div class="table-cell">
+          <div class="table-cell members-cell" data-label="Members">
             <div class="members-info">
               <div class="member-count">
                 <span class="count-badge">{{ getTeamMemberCount(team.id) }}</span>
@@ -58,7 +58,7 @@
             </div>
           </div>
           
-          <div class="table-cell">
+          <div class="table-cell shared-cell" data-label="Shared Resources">
             <div class="shared-resources">
               <div class="shared-count" *ngIf="getSharedResourceCount(team.id) > 0">
                 <span class="shared-badge">{{ getSharedResourceCount(team.id) }}</span>
@@ -71,11 +71,11 @@
             </div>
           </div>
           
-          <div class="table-cell">
+          <div class="table-cell description-cell" data-label="Description">
             <p class="description">{{ team.description }}</p>
           </div>
           
-          <div class="table-cell">
+          <div class="table-cell actions-cell" data-label="Actions">
             <div class="action-buttons">
               <button class="btn-edit" (click)="editTeam(team.id)">
                 ✏️ Edit
