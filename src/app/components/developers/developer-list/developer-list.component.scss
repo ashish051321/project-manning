@@ -106,6 +106,7 @@
     .table-cell {
       display: flex;
       align-items: center;
+      padding: 0.5rem;
     }
   }
 }
@@ -133,6 +134,25 @@
       color: #2c3e50;
       font-size: 1.1rem;
       font-weight: 600;
+
+      &.developer-name.clickable {
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border-radius: 3px;
+        padding: 2px 4px;
+        margin: -2px -4px;
+
+        &:hover {
+          color: #3498db;
+          background: rgba(52, 152, 219, 0.1);
+          text-decoration: underline;
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
+      }
     }
 
     .developer-id {
@@ -379,6 +399,33 @@
 }
 
 // Responsive design
+@media (max-width: 1200px) {
+  .developers-table {
+    .table-header,
+    .table-row {
+      grid-template-columns: 2fr 1fr 2fr 1.5fr 1fr;
+    }
+
+    .skills-cell {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .developers-table {
+    .table-header,
+    .table-row {
+      grid-template-columns: 2fr 1fr 2fr 1fr;
+    }
+
+    .skills-cell,
+    .availability-cell {
+      display: none;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .developer-list-container {
     padding: 1rem;
@@ -396,42 +443,286 @@
   }
 
   .developers-table {
-    .table-header,
-    .table-row {
-      grid-template-columns: 1fr;
-      gap: 0.5rem;
-    }
-
     .table-header {
       display: none;
     }
 
     .table-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
       border: 1px solid #ecf0f1;
       border-radius: 8px;
       margin-bottom: 1rem;
       padding: 1rem;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .table-cell {
-      justify-content: space-between;
-      padding: 0.5rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0.5rem;
+      border: none;
 
       &:before {
         content: attr(data-label);
         font-weight: 600;
         color: #2c3e50;
-        margin-right: 1rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .developer-cell {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      &:before {
+        display: none;
+      }
+    }
+
+    .type-cell {
+      grid-column: 1 / 2;
+    }
+
+    .team-cell {
+      grid-column: 2 / 3;
+    }
+
+    .skills-cell {
+      grid-column: 1 / 2;
+      display: flex;
+    }
+
+    .availability-cell {
+      grid-column: 2 / 3;
+      display: flex;
+    }
+
+    .actions-cell {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      &:before {
+        display: none;
+      }
+    }
+  }
+
+  .developer-info {
+    flex: 1;
+    justify-content: space-between;
+
+    .developer-avatar {
+      width: 40px;
+      height: 40px;
+      font-size: 1.5rem;
+    }
+
+    .developer-details {
+      flex: 1;
+      margin-left: 0.75rem;
+
+      h3.developer-name.clickable {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .developer-id {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  .developer-type {
+    .type-badge {
+      padding: 0.3rem 0.6rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  .team-assignment {
+    .primary-team, .shared-teams {
+      .team-name {
+        font-size: 0.9rem;
+      }
+
+      .manager-name, .teams-count {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  .skills-info {
+    .skills-overview {
+      gap: 0.75rem;
+
+      .skill-count, .app-count {
+        .count-badge {
+          font-size: 0.75rem;
+          padding: 0.15rem 0.4rem;
+        }
+
+        .count-label {
+          font-size: 0.65rem;
+        }
+      }
+    }
+
+    .top-skills {
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
+  }
+
+  .availability-info {
+    .status-badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+    }
+
+    .vacation-info {
+      .vacation-badge {
+        font-size: 0.65rem;
+        padding: 0.15rem 0.3rem;
+      }
+
+      .vacation-label {
+        font-size: 0.65rem;
       }
     }
   }
 
   .action-buttons {
-    justify-content: center;
-    width: 100%;
+    gap: 0.5rem;
+
+    button {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  .developer-stats {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+
+    .stats-card {
+      padding: 1rem;
+
+      .stat-icon {
+        font-size: 1.5rem;
+      }
+
+      .stat-content {
+        h3 {
+          font-size: 1.5rem;
+        }
+
+        p {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .developers-table {
+    .table-row {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .table-cell {
+      grid-column: 1 / -1;
+      flex-direction: column;
+      align-items: flex-start;
+
+      &:before {
+        display: block;
+      }
+    }
+
+    .developer-cell {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      &:before {
+        display: none;
+      }
+    }
+
+    .actions-cell {
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      &:before {
+        display: none;
+      }
+    }
+  }
+
+  .developer-info {
+    .developer-avatar {
+      width: 35px;
+      height: 35px;
+      font-size: 1.25rem;
+    }
+
+    .developer-details {
+      margin-left: 0.5rem;
+
+      h3.developer-name.clickable {
+        font-size: 0.9rem;
+      }
+
+      .developer-id {
+        font-size: 0.7rem;
+      }
+    }
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.25rem;
+
+    button {
+      padding: 0.3rem 0.6rem;
+      font-size: 0.7rem;
+    }
   }
 
   .developer-stats {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+
+    .stats-card {
+      padding: 0.75rem;
+
+      .stat-icon {
+        font-size: 1.25rem;
+      }
+
+      .stat-content {
+        h3 {
+          font-size: 1.25rem;
+        }
+
+        p {
+          font-size: 0.75rem;
+        }
+      }
+    }
   }
 }

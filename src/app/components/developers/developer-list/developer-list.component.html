@@ -24,17 +24,21 @@
 
       <div class="table-body">
         <div class="table-row" *ngFor="let developer of developers">
-          <div class="table-cell">
+          <!-- Developer Info Column -->
+          <div class="table-cell developer-cell" data-label="Developer">
             <div class="developer-info">
               <div class="developer-avatar">👨‍💻</div>
               <div class="developer-details">
-                <h3>{{ developer.name }}</h3>
+                <h3 class="developer-name clickable" (click)="editDeveloper(developer.id)">
+                  {{ developer.name }}
+                </h3>
                 <span class="developer-id">ID: {{ developer.id }}</span>
               </div>
             </div>
           </div>
           
-          <div class="table-cell">
+          <!-- Type Column -->
+          <div class="table-cell type-cell" data-label="Type">
             <div class="developer-type">
               <span class="type-badge" [class]="getDeveloperTypeClass(developer)">
                 {{ getDeveloperType(developer) }}
@@ -42,7 +46,8 @@
             </div>
           </div>
           
-          <div class="table-cell">
+          <!-- Team Assignment Column -->
+          <div class="table-cell team-cell" data-label="Team Assignment">
             <div class="team-assignment">
               <div class="primary-team" *ngIf="!developer.isSharedResource">
                 <span class="team-name">{{ getTeamName(developer.teamId) }}</span>
@@ -59,7 +64,8 @@
             </div>
           </div>
           
-          <div class="table-cell">
+          <!-- Skills Column -->
+          <div class="table-cell skills-cell" data-label="Skills">
             <div class="skills-info">
               <div class="skills-overview">
                 <div class="skill-count">
@@ -77,7 +83,8 @@
             </div>
           </div>
           
-          <div class="table-cell">
+          <!-- Availability Column -->
+          <div class="table-cell availability-cell" data-label="Availability">
             <div class="availability-info">
               <div class="status-badge" [class]="getAvailabilityClass(developer)">
                 {{ getAvailabilityStatus(developer) }}
@@ -89,7 +96,8 @@
             </div>
           </div>
           
-          <div class="table-cell">
+          <!-- Actions Column -->
+          <div class="table-cell actions-cell" data-label="Actions">
             <div class="action-buttons">
               <button class="btn-edit" (click)="editDeveloper(developer.id)">
                 ✏️ Edit
